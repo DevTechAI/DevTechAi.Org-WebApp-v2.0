@@ -1,0 +1,756 @@
+# N8N Workflow Templates for DevTechAI WebApp v2.0
+
+## User Registration Workflow
+```json
+{
+  "name": "User Registration Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "user-registration",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "user-registration-webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.email }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "validate-input",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "resource": "user",
+        "additionalFields": {
+          "email": "={{ $json.email }}",
+          "name": "={{ $json.name }}",
+          "password": "={{ $json.password }}",
+          "status": "pending"
+        }
+      },
+      "id": "create-user",
+      "name": "Create User",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [680, 200],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "fromEmail": "noreply@devtechai.org",
+        "toEmail": "={{ $json.email }}",
+        "subject": "Welcome to DevTechAI",
+        "message": "Welcome {{ $json.name }}! Your account has been created successfully.",
+        "options": {
+          "template": "welcome-email"
+        }
+      },
+      "id": "send-welcome-email",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [900, 200],
+      "credentials": "smtpCredentials"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "resource": "event",
+        "additionalFields": {
+          "type": "user_registered",
+          "data": "={{ $json }}",
+          "timestamp": "={{ new Date().toISOString() }}"
+        }
+      },
+      "id": "log-event",
+      "name": "Log Event",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [900, 400],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"User registered successfully\", \"userId\": $json.id } }}"
+      },
+      "id": "success-response",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid input data\" } }}"
+      },
+      "id": "error-response",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 400]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input": {
+      "main": [
+        [
+          {
+            "node": "Create User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create User": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "timezone": "UTC"
+  }
+}
+```
+
+## AI Chat Processing Workflow
+```json
+{
+  "name": "AI Chat Processing Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "chat-webhook",
+      "name": "Chat Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "ai-chat-webhook"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "resource": "conversation",
+        "additionalFields": {
+          "user_id": "={{ $json.userId }}",
+          "message": "={{ $json.message }}",
+          "timestamp": "={{ new Date().toISOString() }}"
+        }
+      },
+      "id": "save-conversation",
+      "name": "Save Conversation",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "operation": "chatCompletion",
+        "model": "gpt-4",
+        "messages": "={{ [{ \"role\": \"user\", \"content\": $json.message }] }}",
+        "temperature": 0.7,
+        "maxTokens": 1000
+      },
+      "id": "openai-chat",
+      "name": "OpenAI Chat",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "credentials": "openAiApi"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "resource": "conversation",
+        "updateKey": "id",
+        "updateKeyValue": "={{ $('Save Conversation').item.json.id }}",
+        "additionalFields": {
+          "response": "={{ $json.choices[0].message.content }}",
+          "model": "={{ $json.model }}",
+          "tokens_used": "={{ $json.usage.total_tokens }}"
+        }
+      },
+      "id": "update-conversation",
+      "name": "Update Conversation",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "resource": "event",
+        "additionalFields": {
+          "type": "ai_chat_completed",
+          "data": "={{ { \"userId\": $('Save Conversation').item.json.user_id, \"message\": $('Save Conversation').item.json.message, \"response\": $json.response, \"tokens\": $json.tokens_used } }}",
+          "timestamp": "={{ new Date().toISOString() }}"
+        }
+      },
+      "id": "log-ai-event",
+      "name": "Log AI Event",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [900, 500],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"response\": $json.response, \"conversationId\": $('Save Conversation').item.json.id } }}"
+      },
+      "id": "chat-response",
+      "name": "Chat Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "Chat Webhook": {
+      "main": [
+        [
+          {
+            "node": "Save Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Conversation": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat": {
+      "main": [
+        [
+          {
+            "node": "Update Conversation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log AI Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Conversation": {
+      "main": [
+        [
+          {
+            "node": "Chat Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "timezone": "UTC"
+  }
+}
+```
+
+## File Upload Processing Workflow
+```json
+{
+  "name": "File Upload Processing Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "file-upload",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "upload-webhook",
+      "name": "Upload Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "file-upload-webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.file }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "validate-file",
+      "name": "Validate File",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucket": "devtechai-uploads",
+        "key": "={{ $json.userId }}/{{ $json.filename }}",
+        "body": "={{ $json.file }}",
+        "contentType": "={{ $json.contentType }}"
+      },
+      "id": "upload-to-s3",
+      "name": "Upload to S3",
+      "type": "n8n-nodes-base.aws",
+      "typeVersion": 1,
+      "position": [680, 200],
+      "credentials": "awsCredentials"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "resource": "file",
+        "additionalFields": {
+          "user_id": "={{ $json.userId }}",
+          "filename": "={{ $json.filename }}",
+          "content_type": "={{ $json.contentType }}",
+          "size": "={{ $json.size }}",
+          "s3_key": "={{ $('Upload to S3').item.json.Key }}",
+          "s3_url": "={{ $('Upload to S3').item.json.Location }}",
+          "uploaded_at": "={{ new Date().toISOString() }}"
+        }
+      },
+      "id": "save-file-record",
+      "name": "Save File Record",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [900, 200],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "resource": "event",
+        "additionalFields": {
+          "type": "file_uploaded",
+          "data": "={{ { \"userId\": $json.userId, \"filename\": $json.filename, \"size\": $json.size, \"s3Url\": $('Upload to S3').item.json.Location } }}",
+          "timestamp": "={{ new Date().toISOString() }}"
+        }
+      },
+      "id": "log-upload-event",
+      "name": "Log Upload Event",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [900, 400],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"fileId\": $json.id, \"url\": $('Upload to S3').item.json.Location } }}"
+      },
+      "id": "upload-success",
+      "name": "Upload Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid file data\" } }}"
+      },
+      "id": "upload-error",
+      "name": "Upload Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 400]
+    }
+  ],
+  "connections": {
+    "Upload Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate File": {
+      "main": [
+        [
+          {
+            "node": "Upload to S3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to S3": {
+      "main": [
+        [
+          {
+            "node": "Save File Record",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log Upload Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save File Record": {
+      "main": [
+        [
+          {
+            "node": "Upload Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "timezone": "UTC"
+  }
+}
+```
+
+## Notification Workflow
+```json
+{
+  "name": "Notification Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send-notification",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "notification-webhook",
+      "name": "Notification Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "notification-webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.type }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "validate-notification",
+      "name": "Validate Notification",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.type }}",
+              "value2": "email",
+              "operation": "equal"
+            }
+          ]
+        }
+      },
+      "id": "check-email-type",
+      "name": "Check Email Type",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "fromEmail": "noreply@devtechai.org",
+        "toEmail": "={{ $json.recipient }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.message }}",
+        "options": {
+          "template": "={{ $json.template }}"
+        }
+      },
+      "id": "send-email",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [900, 100],
+      "credentials": "smtpCredentials"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.type }}",
+              "value2": "sms",
+              "operation": "equal"
+            }
+          ]
+        }
+      },
+      "id": "check-sms-type",
+      "name": "Check SMS Type",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "to": "={{ $json.recipient }}",
+        "message": "={{ $json.message }}"
+      },
+      "id": "send-sms",
+      "name": "Send SMS",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "credentials": "twilioCredentials"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "resource": "notification",
+        "additionalFields": {
+          "type": "={{ $json.type }}",
+          "recipient": "={{ $json.recipient }}",
+          "subject": "={{ $json.subject }}",
+          "message": "={{ $json.message }}",
+          "status": "sent",
+          "sent_at": "={{ new Date().toISOString() }}"
+        }
+      },
+      "id": "log-notification",
+      "name": "Log Notification",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1120, 200],
+      "credentials": "supabaseApi"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Notification sent successfully\" } }}"
+      },
+      "id": "notification-success",
+      "name": "Notification Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid notification data\" } }}"
+      },
+      "id": "notification-error",
+      "name": "Notification Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 500]
+    }
+  ],
+  "connections": {
+    "Notification Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Notification": {
+      "main": [
+        [
+          {
+            "node": "Check Email Type",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check SMS Type",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notification Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Email Type": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check SMS Type": {
+      "main": [
+        [
+          {
+            "node": "Send SMS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        [
+          {
+            "node": "Log Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send SMS": {
+      "main": [
+        [
+          {
+            "node": "Log Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Notification": {
+      "main": [
+        [
+          {
+            "node": "Notification Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "timezone": "UTC"
+  }
+}
+```

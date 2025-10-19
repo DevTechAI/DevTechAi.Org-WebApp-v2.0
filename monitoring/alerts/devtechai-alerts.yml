@@ -1,0 +1,422 @@
+# Alert Rules for DevTechAI WebApp v2.0
+
+groups:
+- name: devtechai-application-alerts
+  rules:
+  # High Error Rate Alert
+  - alert: HighErrorRate
+    expr: rate(http_requests_total{status_code=~"5.."}[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: critical
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "High error rate detected in DevTechAI WebApp"
+      description: "Error rate is {{ $value }} errors per second for the last 5 minutes"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-error-rate"
+      dashboard_url: "https://grafana.devtechai.org/d/devtechai-app-overview"
+
+  # High Response Time Alert
+  - alert: HighResponseTime
+    expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "High response time detected"
+      description: "95th percentile response time is {{ $value }} seconds"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-response-time"
+
+  # Very High Response Time Alert
+  - alert: VeryHighResponseTime
+    expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 5
+    for: 2m
+    labels:
+      severity: critical
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "Very high response time detected"
+      description: "95th percentile response time is {{ $value }} seconds"
+      runbook_url: "https://docs.devtechai.org/runbooks/very-high-response-time"
+
+  # Low Request Rate Alert
+  - alert: LowRequestRate
+    expr: rate(http_requests_total[5m]) < 0.1
+    for: 10m
+    labels:
+      severity: warning
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "Low request rate detected"
+      description: "Request rate is {{ $value }} requests per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/low-request-rate"
+
+  # High Memory Usage Alert
+  - alert: HighMemoryUsage
+    expr: (process_resident_memory_bytes / 1024 / 1024) > 1024
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "High memory usage detected"
+      description: "Memory usage is {{ $value }} MB"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-memory-usage"
+
+  # Very High Memory Usage Alert
+  - alert: VeryHighMemoryUsage
+    expr: (process_resident_memory_bytes / 1024 / 1024) > 2048
+    for: 2m
+    labels:
+      severity: critical
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "Very high memory usage detected"
+      description: "Memory usage is {{ $value }} MB"
+      runbook_url: "https://docs.devtechai.org/runbooks/very-high-memory-usage"
+
+  # High CPU Usage Alert
+  - alert: HighCPUUsage
+    expr: rate(process_cpu_seconds_total[5m]) * 100 > 80
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "High CPU usage detected"
+      description: "CPU usage is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-cpu-usage"
+
+  # Very High CPU Usage Alert
+  - alert: VeryHighCPUUsage
+    expr: rate(process_cpu_seconds_total[5m]) * 100 > 95
+    for: 2m
+    labels:
+      severity: critical
+      service: devtechai-webapp
+      team: platform
+    annotations:
+      summary: "Very high CPU usage detected"
+      description: "CPU usage is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/very-high-cpu-usage"
+
+- name: devtechai-database-alerts
+  rules:
+  # High Database Connection Count
+  - alert: HighDatabaseConnections
+    expr: database_connections_active > 80
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-database
+      team: platform
+    annotations:
+      summary: "High database connection count"
+      description: "Database connections: {{ $value }}"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-database-connections"
+
+  # Very High Database Connection Count
+  - alert: VeryHighDatabaseConnections
+    expr: database_connections_active > 95
+    for: 2m
+    labels:
+      severity: critical
+      service: devtechai-database
+      team: platform
+    annotations:
+      summary: "Very high database connection count"
+      description: "Database connections: {{ $value }}"
+      runbook_url: "https://docs.devtechai.org/runbooks/very-high-database-connections"
+
+  # Slow Database Queries
+  - alert: SlowDatabaseQueries
+    expr: histogram_quantile(0.95, rate(database_query_duration_seconds_bucket[5m])) > 1
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-database
+      team: platform
+    annotations:
+      summary: "Slow database queries detected"
+      description: "95th percentile query duration is {{ $value }} seconds"
+      runbook_url: "https://docs.devtechai.org/runbooks/slow-database-queries"
+
+  # Database Connection Errors
+  - alert: DatabaseConnectionErrors
+    expr: rate(database_connection_errors_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: critical
+      service: devtechai-database
+      team: platform
+    annotations:
+      summary: "Database connection errors detected"
+      description: "Database connection error rate is {{ $value }} errors per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/database-connection-errors"
+
+- name: devtechai-redis-alerts
+  rules:
+  # High Redis Memory Usage
+  - alert: HighRedisMemoryUsage
+    expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 80
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-redis
+      team: platform
+    annotations:
+      summary: "High Redis memory usage"
+      description: "Redis memory usage is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-redis-memory-usage"
+
+  # Very High Redis Memory Usage
+  - alert: VeryHighRedisMemoryUsage
+    expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 95
+    for: 2m
+    labels:
+      severity: critical
+      service: devtechai-redis
+      team: platform
+    annotations:
+      summary: "Very high Redis memory usage"
+      description: "Redis memory usage is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/very-high-redis-memory-usage"
+
+  # Redis Connection Errors
+  - alert: RedisConnectionErrors
+    expr: rate(redis_connection_errors_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: critical
+      service: devtechai-redis
+      team: platform
+    annotations:
+      summary: "Redis connection errors detected"
+      description: "Redis connection error rate is {{ $value }} errors per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/redis-connection-errors"
+
+- name: devtechai-ai-service-alerts
+  rules:
+  # High AI Service Error Rate
+  - alert: HighAIServiceErrorRate
+    expr: rate(ai_requests_total{status="error"}[5m]) / rate(ai_requests_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-ai
+      team: platform
+    annotations:
+      summary: "High AI service error rate"
+      description: "AI service error rate is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-ai-service-error-rate"
+
+  # AI Service Rate Limit Exceeded
+  - alert: AIServiceRateLimitExceeded
+    expr: rate(ai_requests_total{status="rate_limited"}[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-ai
+      team: platform
+    annotations:
+      summary: "AI service rate limit exceeded"
+      description: "AI service rate limit exceeded {{ $value }} times per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/ai-service-rate-limit"
+
+  # High AI Service Latency
+  - alert: HighAIServiceLatency
+    expr: histogram_quantile(0.95, rate(ai_request_duration_seconds_bucket[5m])) > 10
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-ai
+      team: platform
+    annotations:
+      summary: "High AI service latency"
+      description: "95th percentile AI service latency is {{ $value }} seconds"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-ai-service-latency"
+
+- name: devtechai-workflow-alerts
+  rules:
+  # High Workflow Failure Rate
+  - alert: HighWorkflowFailureRate
+    expr: rate(workflow_executions_total{status="failed"}[5m]) / rate(workflow_executions_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-workflow
+      team: platform
+    annotations:
+      summary: "High workflow failure rate"
+      description: "Workflow failure rate is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-workflow-failure-rate"
+
+  # Workflow Execution Timeout
+  - alert: WorkflowExecutionTimeout
+    expr: histogram_quantile(0.95, rate(workflow_execution_duration_seconds_bucket[5m])) > 300
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-workflow
+      team: platform
+    annotations:
+      summary: "Workflow execution timeout"
+      description: "95th percentile workflow execution time is {{ $value }} seconds"
+      runbook_url: "https://docs.devtechai.org/runbooks/workflow-execution-timeout"
+
+- name: devtechai-infrastructure-alerts
+  rules:
+  # Pod Crash Looping
+  - alert: PodCrashLooping
+    expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+    for: 5m
+    labels:
+      severity: critical
+      service: devtechai-infrastructure
+      team: platform
+    annotations:
+      summary: "Pod is crash looping"
+      description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is restarting frequently"
+      runbook_url: "https://docs.devtechai.org/runbooks/pod-crash-looping"
+
+  # Pod Not Ready
+  - alert: PodNotReady
+    expr: kube_pod_status_phase{phase!="Running"} == 1
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-infrastructure
+      team: platform
+    annotations:
+      summary: "Pod is not ready"
+      description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not ready"
+      runbook_url: "https://docs.devtechai.org/runbooks/pod-not-ready"
+
+  # High Disk Usage
+  - alert: HighDiskUsage
+    expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 20
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-infrastructure
+      team: platform
+    annotations:
+      summary: "High disk usage"
+      description: "Disk usage on {{ $labels.instance }} is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-disk-usage"
+
+  # Very High Disk Usage
+  - alert: VeryHighDiskUsage
+    expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
+    for: 2m
+    labels:
+      severity: critical
+      service: devtechai-infrastructure
+      team: platform
+    annotations:
+      summary: "Very high disk usage"
+      description: "Disk usage on {{ $labels.instance }} is {{ $value }}%"
+      runbook_url: "https://docs.devtechai.org/runbooks/very-high-disk-usage"
+
+  # High Network Latency
+  - alert: HighNetworkLatency
+    expr: histogram_quantile(0.95, rate(node_network_receive_bytes_total[5m])) > 1000000000
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-infrastructure
+      team: platform
+    annotations:
+      summary: "High network latency"
+      description: "Network latency is high on {{ $labels.instance }}"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-network-latency"
+
+- name: devtechai-security-alerts
+  rules:
+  # High Authentication Failure Rate
+  - alert: HighAuthenticationFailureRate
+    expr: rate(auth_failures_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-security
+      team: security
+    annotations:
+      summary: "High authentication failure rate"
+      description: "Authentication failure rate is {{ $value }} failures per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-auth-failure-rate"
+
+  # Suspicious Activity Detected
+  - alert: SuspiciousActivityDetected
+    expr: rate(suspicious_requests_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: critical
+      service: devtechai-security
+      team: security
+    annotations:
+      summary: "Suspicious activity detected"
+      description: "Suspicious activity rate is {{ $value }} requests per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/suspicious-activity"
+
+  # Rate Limit Exceeded
+  - alert: RateLimitExceeded
+    expr: rate(rate_limit_exceeded_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      service: devtechai-security
+      team: security
+    annotations:
+      summary: "Rate limit exceeded"
+      description: "Rate limit exceeded {{ $value }} times per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/rate-limit-exceeded"
+
+- name: devtechai-business-alerts
+  rules:
+  # Low User Activity
+  - alert: LowUserActivity
+    expr: rate(user_sessions_total[5m]) < 0.1
+    for: 10m
+    labels:
+      severity: warning
+      service: devtechai-business
+      team: product
+    annotations:
+      summary: "Low user activity detected"
+      description: "User activity is {{ $value }} sessions per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/low-user-activity"
+
+  # High User Registration Rate
+  - alert: HighUserRegistrationRate
+    expr: rate(user_registrations_total[5m]) > 1
+    for: 5m
+    labels:
+      severity: info
+      service: devtechai-business
+      team: product
+    annotations:
+      summary: "High user registration rate"
+      description: "User registration rate is {{ $value }} registrations per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/high-user-registration-rate"
+
+  # Payment Processing Errors
+  - alert: PaymentProcessingErrors
+    expr: rate(payment_errors_total[5m]) > 0.01
+    for: 5m
+    labels:
+      severity: critical
+      service: devtechai-business
+      team: product
+    annotations:
+      summary: "Payment processing errors detected"
+      description: "Payment error rate is {{ $value }} errors per second"
+      runbook_url: "https://docs.devtechai.org/runbooks/payment-processing-errors"

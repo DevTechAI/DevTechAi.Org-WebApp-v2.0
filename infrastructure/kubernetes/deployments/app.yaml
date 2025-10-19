@@ -1,0 +1,390 @@
+# Kubernetes Manifests for DevTechAI WebApp v2.0
+
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devtechai-webapp
+  labels:
+    name: devtechai-webapp
+    app: devtechai-webapp
+    version: v2.0.0
+
+---
+# ConfigMap for Application Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devtechai-config
+  namespace: devtechai-webapp
+data:
+  NODE_ENV: "production"
+  APP_VERSION: "2.0.0"
+  PORT: "3000"
+  LOG_LEVEL: "info"
+  CORS_ORIGIN: "https://devtechai.org"
+  RATE_LIMIT_WINDOW_MS: "900000"
+  RATE_LIMIT_MAX_REQUESTS: "100"
+
+---
+# Secret for Database Credentials
+apiVersion: v1
+kind: Secret
+metadata:
+  name: devtechai-secrets
+  namespace: devtechai-webapp
+type: Opaque
+data:
+  DATABASE_URL: <base64-encoded-database-url>
+  REDIS_URL: <base64-encoded-redis-url>
+  JWT_SECRET: <base64-encoded-jwt-secret>
+  OPENAI_API_KEY: <base64-encoded-openai-api-key>
+  SENTRY_DSN: <base64-encoded-sentry-dsn>
+
+---
+# Deployment for Main Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devtechai-app
+  namespace: devtechai-webapp
+  labels:
+    app: devtechai-app
+    version: v2.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: devtechai-app
+  template:
+    metadata:
+      labels:
+        app: devtechai-app
+        version: v2.0.0
+    spec:
+      containers:
+      - name: devtechai-app
+        image: devtechai/webapp:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: devtechai-config
+              key: NODE_ENV
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: devtechai-config
+              key: PORT
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: devtechai-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: devtechai-secrets
+              key: REDIS_URL
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: devtechai-secrets
+              key: JWT_SECRET
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/uploads
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: devtechai-uploads-pvc
+
+---
+# Service for Main Application
+apiVersion: v1
+kind: Service
+metadata:
+  name: devtechai-app-service
+  namespace: devtechai-webapp
+  labels:
+    app: devtechai-app
+spec:
+  selector:
+    app: devtechai-app
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+  type: ClusterIP
+
+---
+# PersistentVolumeClaim for File Uploads
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devtechai-uploads-pvc
+  namespace: devtechai-webapp
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: gp2
+
+---
+# HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: devtechai-app-hpa
+  namespace: devtechai-webapp
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: devtechai-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+# Ingress for External Access
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devtechai-ingress
+  namespace: devtechai-webapp
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+spec:
+  tls:
+  - hosts:
+    - devtechai.org
+    - api.devtechai.org
+    secretName: devtechai-tls
+  rules:
+  - host: devtechai.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: devtechai-app-service
+            port:
+              number: 80
+  - host: api.devtechai.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: devtechai-app-service
+            port:
+              number: 80
+
+---
+# NetworkPolicy for Security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: devtechai-network-policy
+  namespace: devtechai-webapp
+spec:
+  podSelector:
+    matchLabels:
+      app: devtechai-app
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 3000
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 5432
+    - protocol: TCP
+      port: 6379
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+
+---
+# PodDisruptionBudget
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: devtechai-app-pdb
+  namespace: devtechai-webapp
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: devtechai-app
+
+---
+# CronJob for Database Backups
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: devtechai-backup
+  namespace: devtechai-webapp
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: postgres:15-alpine
+            command:
+            - /bin/sh
+            - -c
+            - |
+              pg_dump $DATABASE_URL > /backup/backup-$(date +%Y%m%d_%H%M%S).sql
+              aws s3 cp /backup/ s3://devtechai-backups/ --recursive
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: devtechai-secrets
+                  key: DATABASE_URL
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: devtechai-secrets
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: devtechai-secrets
+                  key: AWS_SECRET_ACCESS_KEY
+            volumeMounts:
+            - name: backup-storage
+              mountPath: /backup
+          volumes:
+          - name: backup-storage
+            persistentVolumeClaim:
+              claimName: devtechai-backup-pvc
+          restartPolicy: OnFailure
+
+---
+# PersistentVolumeClaim for Backups
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devtechai-backup-pvc
+  namespace: devtechai-webapp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: gp2
+
+---
+# ServiceMonitor for Prometheus
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: devtechai-app-monitor
+  namespace: devtechai-webapp
+  labels:
+    app: devtechai-app
+spec:
+  selector:
+    matchLabels:
+      app: devtechai-app
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+
+---
+# PrometheusRule for Alerting
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: devtechai-alerts
+  namespace: devtechai-webapp
+spec:
+  groups:
+  - name: devtechai.rules
+    rules:
+    - alert: HighErrorRate
+      expr: rate(http_requests_total{status_code=~"5.."}[5m]) > 0.1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High error rate detected"
+        description: "Error rate is {{ $value }} errors per second"
+    
+    - alert: HighResponseTime
+      expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High response time"
+        description: "95th percentile response time is {{ $value }} seconds"
+    
+    - alert: PodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Pod is crash looping"
+        description: "Pod {{ $labels.pod }} is restarting frequently"
