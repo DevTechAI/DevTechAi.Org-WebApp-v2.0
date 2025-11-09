@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "nodemon --exec ts-node src/server.ts",
+    "dev:server": "nodemon",
     "dev:client": "next dev",
     "start:webapp": "python3 server.py",
     "webapp": "./start.sh",
@@ -61,7 +61,7 @@
     "@google-cloud/pubsub": "^4.0.0",
     "@google-cloud/storage": "^7.7.0",
     "@google/generative-ai": "^0.2.0",
-    "@opentelemetry/api": "^1.7.0",
+    "@opentelemetry/api": "1.8.0",
     "@opentelemetry/auto-instrumentations-node": "^0.46.0",
     "@opentelemetry/exporter-jaeger": "^1.18.0",
     "@opentelemetry/sdk-node": "^0.50.0",
@@ -86,6 +86,8 @@
     "openai": "^4.20.0",
     "pg": "^8.11.3",
     "prom-client": "^15.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.11.0",
@@ -102,6 +104,7 @@
     "@types/multer": "^1.4.11",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.7",
+    "@types/react": "19.2.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
@@ -129,6 +132,9 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
+  },
+  "overrides": {
+    "@opentelemetry/api": "1.8.0"
   },
   "keywords": [
     "webapp",
