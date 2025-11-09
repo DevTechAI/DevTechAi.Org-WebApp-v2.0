@@ -1,3 +1,10 @@
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { Pool, PoolClient } from 'pg';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, Firestore } from 'firebase/firestore';
+import { MongoClient, Db, ClientSession } from 'mongodb';
+import { ObjectId } from 'mongodb';
+
 // Database Service Interfaces
 export interface DatabaseProvider {
   connect(): Promise<void>;
