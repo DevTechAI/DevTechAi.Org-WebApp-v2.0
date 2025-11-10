@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "echo 'Static site - files are already in public directory'",
+  "buildCommand": "test -d public && echo 'Public directory exists' || (mkdir -p public && echo 'Created public directory')",
   "outputDirectory": "public",
   "framework": null,
   "installCommand": "echo 'Skipping install for static site'",
