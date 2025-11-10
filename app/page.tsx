@@ -1,13 +1,31 @@
 /**
  * Next.js App Router Root Page
- * Minimal Next.js app structure for Vercel deployment
- * This allows Next.js build to succeed while serving static files
+ * Client-side redirect to static index.html
+ * The static HTML site is served from the public directory
  */
 
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useEffect } from 'react';
 
 export default function Home() {
-  // Server-side redirect to static index.html
-  redirect('/index.html');
+  useEffect(() => {
+    // Client-side redirect to static index.html
+    window.location.href = '/index.html';
+  }, []);
+
+  return (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh',
+      flexDirection: 'column',
+      gap: '1rem'
+    }}>
+      <h1>DevTechAI.Org</h1>
+      <p>Loading...</p>
+    </div>
+  );
 }
 

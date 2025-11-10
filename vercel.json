@@ -1,24 +1,32 @@
 {
   "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npm run build:client",
-  "outputDirectory": ".next",
+  "outputDirectory": "out",
   "framework": "nextjs",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/",
-      "destination": "/index.html"
+      "src": "/index.html",
+      "dest": "/index.html"
     },
     {
-      "source": "/services/:path*",
-      "destination": "/services/:path*.html"
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
     },
     {
-      "source": "/portfolio/:path*",
-      "destination": "/portfolio/:path*.html"
+      "src": "/services/(.*)",
+      "dest": "/services/$1"
     },
     {
-      "source": "/solutions/:path*",
-      "destination": "/solutions/:path*.html"
+      "src": "/portfolio/(.*)",
+      "dest": "/portfolio/$1"
+    },
+    {
+      "src": "/solutions/(.*)",
+      "dest": "/solutions/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }

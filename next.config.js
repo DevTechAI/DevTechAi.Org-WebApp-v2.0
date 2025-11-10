@@ -2,6 +2,7 @@
 const nextConfig = {
   // Static export for deployment
   output: 'export',
+  distDir: 'out',
   trailingSlash: true,
   images: {
     unoptimized: true,
