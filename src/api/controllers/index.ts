@@ -1,5 +1,6 @@
 // API Route Handlers
 import { Request, Response, NextFunction } from 'express';
+import bcrypt from 'bcryptjs';
 import { AuthServiceFactory } from '../../services/auth/auth0';
 import { DatabaseServiceFactory } from '../../services/database/supabase';
 import { AIServiceFactory } from '../../services/ai/openai';
@@ -531,7 +532,7 @@ export class WorkflowController {
 
       const workflow = await this.dbService.query(
         'INSERT INTO workflows (name, description, trigger, steps, user_id, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [name, description, JSON.stringify(trigger), JSON.stringify(steps), req.user?.id, 'draft']
+        [name, description, JSON.stringify(trigger), JSON.stringify(steps), (req as any).user?.id, 'draft']
       );
 
       res.status(201).json({
@@ -629,9 +630,9 @@ export class MonitoringController {
           }
         );
         await dbService.healthCheck();
-        health.services.database = 'healthy';
+        (health.services as any).database = 'healthy';
       } catch (error) {
-        health.services.database = 'unhealthy';
+        (health.services as any).database = 'unhealthy';
         health.status = 'unhealthy';
       }
 
@@ -641,9 +642,9 @@ export class MonitoringController {
           url: process.env.REDIS_URL
         });
         await redis.ping();
-        health.services.redis = 'healthy';
+        (health.services as any).redis = 'healthy';
       } catch (error) {
-        health.services.redis = 'unhealthy';
+        (health.services as any).redis = 'unhealthy';
         health.status = 'unhealthy';
       }
 

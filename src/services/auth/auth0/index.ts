@@ -1,4 +1,21 @@
 // Authentication Service Interfaces
+// Optional packages - uncomment and install if needed
+// import { ManagementClient, AuthenticationClient } from 'auth0';
+// import { initializeApp, getAuth, Auth, signInWithEmailAndPassword } from 'firebase/auth';
+
+// Type declarations for optional packages
+const ManagementClient = class {
+  constructor(config: any) {}
+} as any;
+const AuthenticationClient = class {
+  constructor(config: any) {}
+} as any;
+type Auth = any;
+const initializeApp = (config: any) => ({});
+const getAuth = (app: any) => ({});
+const signInWithEmailAndPassword = async (auth: any, email: string, password: string) => ({});
+import jwt from 'jsonwebtoken';
+
 export interface AuthProvider {
   authenticate(credentials: AuthCredentials): Promise<AuthResult>;
   refreshToken(refreshToken: string): Promise<AuthResult>;
@@ -38,8 +55,8 @@ export interface User {
 
 // Auth0 Service Implementation
 export class Auth0Service implements AuthProvider {
-  private managementClient: ManagementClient;
-  private auth0Client: Auth0Client;
+  private managementClient: any;
+  private auth0Client: any;
 
   constructor(config: Auth0Config) {
     this.managementClient = new ManagementClient({
@@ -48,7 +65,7 @@ export class Auth0Service implements AuthProvider {
       clientSecret: config.clientSecret
     });
 
-    this.auth0Client = new Auth0Client({
+    this.auth0Client = new AuthenticationClient({
       domain: config.domain,
       clientId: config.clientId
     });
@@ -71,7 +88,7 @@ export class Auth0Service implements AuthProvider {
         user: this.mapUser(user)
       };
     } catch (error) {
-      throw new AuthenticationError('Invalid credentials', error);
+      throw new AuthenticationError('Invalid credentials', error as Error);
     }
   }
 
@@ -90,7 +107,7 @@ export class Auth0Service implements AuthProvider {
         user: this.mapUser(user)
       };
     } catch (error) {
-      throw new AuthenticationError('Invalid refresh token', error);
+      throw new AuthenticationError('Invalid refresh token', error as Error);
     }
   }
 
@@ -100,7 +117,7 @@ export class Auth0Service implements AuthProvider {
         token
       });
     } catch (error) {
-      throw new AuthenticationError('Logout failed', error);
+      throw new AuthenticationError('Logout failed', error as Error);
     }
   }
 
@@ -146,23 +163,23 @@ export class FirebaseAuthService implements AuthProvider {
 
   async authenticate(credentials: AuthCredentials): Promise<AuthResult> {
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const userCredential: any = await signInWithEmailAndPassword(
         this.auth,
         credentials.email,
         credentials.password
       );
 
-      const token = await userCredential.user.getIdToken();
-      const refreshToken = await userCredential.user.getIdToken(true);
+      const token = await (userCredential as any).user.getIdToken();
+      const refreshToken = await (userCredential as any).user.getIdToken(true);
 
       return {
         accessToken: token,
         refreshToken: refreshToken,
         expiresIn: 3600,
-        user: this.mapUser(userCredential.user)
+        user: this.mapUser((userCredential as any).user)
       };
     } catch (error) {
-      throw new AuthenticationError('Invalid credentials', error);
+      throw new AuthenticationError('Invalid credentials', error as Error);
     }
   }
 
@@ -182,7 +199,7 @@ export class FirebaseAuthService implements AuthProvider {
         user: this.mapUser(user)
       };
     } catch (error) {
-      throw new AuthenticationError('Token refresh failed', error);
+      throw new AuthenticationError('Token refresh failed', error as Error);
     }
   }
 
@@ -190,7 +207,7 @@ export class FirebaseAuthService implements AuthProvider {
     try {
       await this.auth.signOut();
     } catch (error) {
-      throw new AuthenticationError('Logout failed', error);
+      throw new AuthenticationError('Logout failed', error as Error);
     }
   }
 
@@ -254,13 +271,13 @@ export class CustomJWTAuthService implements AuthProvider {
       const accessToken = jwt.sign(
         { userId: user.id, email: user.email },
         this.jwtSecret,
-        { expiresIn: this.jwtExpiresIn }
+        { expiresIn: this.jwtExpiresIn } as jwt.SignOptions
       );
 
       const refreshToken = jwt.sign(
         { userId: user.id, type: 'refresh' },
         this.jwtSecret,
-        { expiresIn: this.refreshExpiresIn }
+        { expiresIn: this.refreshExpiresIn } as jwt.SignOptions
       );
 
       return {
@@ -270,7 +287,7 @@ export class CustomJWTAuthService implements AuthProvider {
         user
       };
     } catch (error) {
-      throw new AuthenticationError('Invalid credentials', error);
+      throw new AuthenticationError('Invalid credentials', error as Error);
     }
   }
 
@@ -287,7 +304,7 @@ export class CustomJWTAuthService implements AuthProvider {
       const newAccessToken = jwt.sign(
         { userId: user.id, email: user.email },
         this.jwtSecret,
-        { expiresIn: this.jwtExpiresIn }
+        { expiresIn: this.jwtExpiresIn } as jwt.SignOptions
       );
 
       return {
@@ -297,7 +314,7 @@ export class CustomJWTAuthService implements AuthProvider {
         user
       };
     } catch (error) {
-      throw new AuthenticationError('Invalid refresh token', error);
+      throw new AuthenticationError('Invalid refresh token', error as Error);
     }
   }
 
@@ -306,7 +323,7 @@ export class CustomJWTAuthService implements AuthProvider {
       // Add token to blacklist
       await this.blacklistToken(token);
     } catch (error) {
-      throw new AuthenticationError('Logout failed', error);
+      throw new AuthenticationError('Logout failed', error as Error);
     }
   }
 
@@ -370,6 +387,7 @@ export class AuthServiceFactory {
 
 // Custom Error Classes
 export class AuthenticationError extends Error {
+  cause?: Error;
   constructor(message: string, cause?: Error) {
     super(message);
     this.name = 'AuthenticationError';

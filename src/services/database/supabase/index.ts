@@ -1,9 +1,10 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Pool, PoolClient } from 'pg';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
-import { MongoClient, Db, ClientSession } from 'mongodb';
-import { ObjectId } from 'mongodb';
+// Firebase and MongoDB imports are optional - uncomment if needed
+// import { initializeApp } from 'firebase/app';
+// import { getFirestore, Firestore } from 'firebase/firestore';
+// import { MongoClient, Db, ClientSession } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 
 // Database Service Interfaces
 export interface DatabaseProvider {
@@ -41,7 +42,7 @@ export class SupabaseService implements DatabaseProvider {
       await this.client.from('_health_check').select('*').limit(1);
       this.connected = true;
     } catch (error) {
-      throw new DatabaseError('Failed to connect to Supabase', error);
+      throw new DatabaseError('Failed to connect to Supabase', error as Error);
     }
   }
 
@@ -63,12 +64,12 @@ export class SupabaseService implements DatabaseProvider {
       });
 
       if (error) {
-        throw new DatabaseError('Query execution failed', error);
+        throw new DatabaseError('Query execution failed', error as Error);
       }
 
       return data || [];
     } catch (error) {
-      throw new DatabaseError('Query failed', error);
+      throw new DatabaseError('Query failed', error as Error);
     }
   }
 
@@ -213,7 +214,7 @@ export class PostgreSQLService implements DatabaseProvider {
       client.release();
       this.connected = true;
     } catch (error) {
-      throw new DatabaseError('Failed to connect to PostgreSQL', error);
+      throw new DatabaseError('Failed to connect to PostgreSQL', error as Error);
     }
   }
 
@@ -231,7 +232,7 @@ export class PostgreSQLService implements DatabaseProvider {
       const result = await this.pool.query(sql, params);
       return result.rows;
     } catch (error) {
-      throw new DatabaseError('Query failed', error);
+      throw new DatabaseError('Query failed', error as Error);
     }
   }
 
@@ -285,8 +286,10 @@ class PostgreSQLTransaction implements Transaction {
 }
 
 // Firebase Firestore Service Implementation
+// Commented out - requires firebase package
+/*
 export class FirebaseFirestoreService implements DatabaseProvider {
-  private db: Firestore;
+  private db: any; // Firestore;
   private connected: boolean = false;
 
   constructor(config: FirebaseConfig) {
@@ -300,7 +303,7 @@ export class FirebaseFirestoreService implements DatabaseProvider {
       await this.db.collection('_health_check').limit(1).get();
       this.connected = true;
     } catch (error) {
-      throw new DatabaseError('Failed to connect to Firestore', error);
+      throw new DatabaseError('Failed to connect to Firestore', error as Error);
     }
   }
 
@@ -314,7 +317,7 @@ export class FirebaseFirestoreService implements DatabaseProvider {
   }
 
   async transaction<T>(callback: (tx: Transaction) => Promise<T>): Promise<T> {
-    return this.db.runTransaction(async (transaction) => {
+    return this.db.runTransaction(async (transaction: any) => {
       const firestoreTransaction = new FirestoreTransaction(transaction);
       return callback(firestoreTransaction);
     });
@@ -340,7 +343,7 @@ export class FirebaseFirestoreService implements DatabaseProvider {
     }
     
     const snapshot = await query.get();
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
   }
 
   async addDocument(collectionName: string, data: Record<string, any>) {
@@ -378,8 +381,11 @@ class FirestoreTransaction implements Transaction {
     // Firestore transactions are automatically rolled back on error
   }
 }
+*/
 
 // MongoDB Service Implementation
+// Commented out - requires mongodb package
+/*
 export class MongoDBService implements DatabaseProvider {
   private client: MongoClient;
   private db: Db;
@@ -392,10 +398,11 @@ export class MongoDBService implements DatabaseProvider {
   async connect(): Promise<void> {
     try {
       await this.client.connect();
-      this.db = this.client.db(config.database);
+      const mongoConfig = (this as any).config || {};
+      this.db = this.client.db(mongoConfig.database || 'devtechai');
       this.connected = true;
     } catch (error) {
-      throw new DatabaseError('Failed to connect to MongoDB', error);
+      throw new DatabaseError('Failed to connect to MongoDB', error as Error);
     }
   }
 
@@ -481,6 +488,7 @@ class MongoDBTransaction implements Transaction {
     await this.session.abortTransaction();
   }
 }
+*/
 
 // Database Factory
 export class DatabaseServiceFactory {
@@ -490,10 +498,10 @@ export class DatabaseServiceFactory {
         return new SupabaseService(config);
       case 'postgresql':
         return new PostgreSQLService(config);
-      case 'firebase':
-        return new FirebaseFirestoreService(config);
-      case 'mongodb':
-        return new MongoDBService(config);
+      // case 'firebase':
+      //   return new FirebaseFirestoreService(config);
+      // case 'mongodb':
+      //   return new MongoDBService(config);
       default:
         throw new Error(`Unknown database provider: ${type}`);
     }
@@ -502,6 +510,7 @@ export class DatabaseServiceFactory {
 
 // Custom Error Classes
 export class DatabaseError extends Error {
+  cause?: Error;
   constructor(message: string, cause?: Error) {
     super(message);
     this.name = 'DatabaseError';

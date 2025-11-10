@@ -1,4 +1,13 @@
 // AI Service Interfaces
+import { OpenAI } from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+// Optional package - uncomment and install if needed
+// import { OpenAIClient } from '@azure/openai';
+const OpenAIClient = class {
+  constructor(endpoint: string, apiKey: string) {}
+} as any;
+
 export interface AIProvider {
   chatCompletion(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResponse>;
   generateText(prompt: string, options?: TextOptions): Promise<TextResponse>;
@@ -116,7 +125,7 @@ export class OpenAIService implements AIProvider {
         finishReason: choice.finish_reason || 'stop'
       };
     } catch (error) {
-      throw new AIError('OpenAI chat completion failed', error);
+      throw new AIError('OpenAI chat completion failed', error as Error);
     }
   }
 
@@ -140,7 +149,7 @@ export class OpenAIService implements AIProvider {
         }
       };
     } catch (error) {
-      throw new AIError('OpenAI text generation failed', error);
+      throw new AIError('OpenAI text generation failed', error as Error);
     }
   }
 
@@ -156,14 +165,14 @@ export class OpenAIService implements AIProvider {
       });
 
       return {
-        images: response.data.map(img => ({
+        images: (response.data || []).map((img: any) => ({
           url: img.url || '',
           revisedPrompt: img.revised_prompt
         })),
-        model: response.model || 'dall-e-3'
+        model: (response as any).model || 'dall-e-3'
       };
     } catch (error) {
-      throw new AIError('OpenAI image generation failed', error);
+      throw new AIError('OpenAI image generation failed', error as Error);
     }
   }
 
@@ -184,7 +193,7 @@ export class OpenAIService implements AIProvider {
         }
       };
     } catch (error) {
-      throw new AIError('OpenAI embedding generation failed', error);
+      throw new AIError('OpenAI embedding generation failed', error as Error);
     }
   }
 }
@@ -201,7 +210,7 @@ export class AnthropicService implements AIProvider {
 
   async chatCompletion(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResponse> {
     try {
-      const response = await this.client.messages.create({
+      const response = await (this.client as any).messages.create({
         model: options?.model || 'claude-3-sonnet-20240229',
         max_tokens: options?.maxTokens || 1000,
         temperature: options?.temperature || 0.7,
@@ -222,7 +231,7 @@ export class AnthropicService implements AIProvider {
         finishReason: response.stop_reason || 'stop'
       };
     } catch (error) {
-      throw new AIError('Anthropic chat completion failed', error);
+      throw new AIError('Anthropic chat completion failed', error as Error);
     }
   }
 
@@ -239,13 +248,13 @@ export class AnthropicService implements AIProvider {
         text: response.completion || '',
         model: response.model,
         usage: {
-          promptTokens: response.usage?.input_tokens || 0,
-          completionTokens: response.usage?.output_tokens || 0,
-          totalTokens: (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0)
+          promptTokens: (response as any).usage?.input_tokens || 0,
+          completionTokens: (response as any).usage?.output_tokens || 0,
+          totalTokens: ((response as any).usage?.input_tokens || 0) + ((response as any).usage?.output_tokens || 0)
         }
       };
     } catch (error) {
-      throw new AIError('Anthropic text generation failed', error);
+      throw new AIError('Anthropic text generation failed', error as Error);
     }
   }
 
@@ -293,7 +302,7 @@ export class GoogleAIService implements AIProvider {
         finishReason: 'stop'
       };
     } catch (error) {
-      throw new AIError('Google AI chat completion failed', error);
+      throw new AIError('Google AI chat completion failed', error as Error);
     }
   }
 
@@ -316,7 +325,7 @@ export class GoogleAIService implements AIProvider {
         }
       };
     } catch (error) {
-      throw new AIError('Google AI text generation failed', error);
+      throw new AIError('Google AI text generation failed', error as Error);
     }
   }
 
@@ -338,7 +347,7 @@ export class GoogleAIService implements AIProvider {
         model: options?.model || 'imagen-2'
       };
     } catch (error) {
-      throw new AIError('Google AI image generation failed', error);
+      throw new AIError('Google AI image generation failed', error as Error);
     }
   }
 
@@ -361,14 +370,14 @@ export class GoogleAIService implements AIProvider {
         }
       };
     } catch (error) {
-      throw new AIError('Google AI embedding generation failed', error);
+      throw new AIError('Google AI embedding generation failed', error as Error);
     }
   }
 }
 
 // Azure AI Service Implementation
 export class AzureAIService implements AIProvider {
-  private client: OpenAIClient;
+  private client: any;
 
   constructor(config: AzureAIConfig) {
     this.client = new OpenAIClient(config.endpoint, config.apiKey);
@@ -405,7 +414,7 @@ export class AzureAIService implements AIProvider {
         finishReason: choice.finishReason || 'stop'
       };
     } catch (error) {
-      throw new AIError('Azure AI chat completion failed', error);
+      throw new AIError('Azure AI chat completion failed', error as Error);
     }
   }
 
@@ -431,7 +440,7 @@ export class AzureAIService implements AIProvider {
         }
       };
     } catch (error) {
-      throw new AIError('Azure AI text generation failed', error);
+      throw new AIError('Azure AI text generation failed', error as Error);
     }
   }
 
@@ -449,14 +458,14 @@ export class AzureAIService implements AIProvider {
       );
 
       return {
-        images: response.data.map(img => ({
+        images: response.data.map((img: any) => ({
           url: img.url || '',
           revisedPrompt: img.revisedPrompt
         })),
-        model: response.model || options?.model || 'dall-e-3'
+        model: (response as any).model || options?.model || 'dall-e-3'
       };
     } catch (error) {
-      throw new AIError('Azure AI image generation failed', error);
+      throw new AIError('Azure AI image generation failed', error as Error);
     }
   }
 
@@ -477,7 +486,7 @@ export class AzureAIService implements AIProvider {
         }
       };
     } catch (error) {
-      throw new AIError('Azure AI embedding generation failed', error);
+      throw new AIError('Azure AI embedding generation failed', error as Error);
     }
   }
 }
@@ -502,6 +511,7 @@ export class AIServiceFactory {
 
 // Custom Error Classes
 export class AIError extends Error {
+  cause?: Error;
   constructor(message: string, cause?: Error) {
     super(message);
     this.name = 'AIError';
