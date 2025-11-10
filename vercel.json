@@ -1,13 +1,9 @@
 {
-  "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "npm run build:client",
-  "outputDirectory": "out",
-  "framework": "nextjs",
+  "version": 2,
+  "buildCommand": "echo 'Static site - no build needed'",
+  "outputDirectory": "public",
+  "framework": null,
   "routes": [
-    {
-      "src": "/index.html",
-      "dest": "/index.html"
-    },
     {
       "src": "/assets/(.*)",
       "dest": "/assets/$1"
@@ -23,6 +19,10 @@
     {
       "src": "/solutions/(.*)",
       "dest": "/solutions/$1"
+    },
+    {
+      "src": "/(.*\\.(html|css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|json))",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
