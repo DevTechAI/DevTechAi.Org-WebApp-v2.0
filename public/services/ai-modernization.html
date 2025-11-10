@@ -27,6 +27,169 @@
 
   <!-- Main CSS File -->
   <link href="../assets/css/main.css" rel="stylesheet">
+  <!-- Mobile Responsive Enhancements -->
+  <style>
+    /* Mobile Logo Sizing */
+    .logo-img {
+      height: 40px;
+      margin-right: 10px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    
+    @media (max-width: 768px) {
+      .logo-img {
+        height: 32px;
+        margin-right: 8px;
+      }
+      
+      .sitename {
+        font-size: 1.2rem !important;
+      }
+      
+      .header .btn-getstarted {
+        padding: 5px 12px !important;
+        font-size: 0.85rem !important;
+        white-space: nowrap;
+      }
+      
+      .header {
+        padding: 10px 0 !important;
+      }
+      
+      .container-fluid {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .logo-img {
+        height: 28px;
+        margin-right: 6px;
+      }
+      
+      .sitename {
+        font-size: 1rem !important;
+      }
+      
+      .header .btn-getstarted {
+        padding: 4px 10px !important;
+        font-size: 0.75rem !important;
+        display: none; /* Hide on very small screens */
+      }
+      
+      .header .logo span {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* Mobile Section Improvements */
+    @media (max-width: 768px) {
+      .section {
+        padding: 40px 0 !important;
+      }
+      
+      .section-title h2 {
+        font-size: 24px !important;
+      }
+      
+      .section-title p {
+        font-size: 14px !important;
+      }
+      
+      .hero h2 {
+        font-size: 28px !important;
+      }
+      
+      .hero p {
+        font-size: 16px !important;
+      }
+    }
+    
+    /* Mobile Card Improvements */
+    @media (max-width: 768px) {
+      .card, .icon-box {
+        margin-bottom: 20px;
+      }
+      
+      .row.gy-4 > * {
+        margin-bottom: 20px;
+      }
+    }
+    
+    /* Mobile Text Improvements */
+    @media (max-width: 576px) {
+      h1 { font-size: 1.75rem !important; }
+      h2 { font-size: 1.5rem !important; }
+      h3 { font-size: 1.25rem !important; }
+      h4 { font-size: 1.1rem !important; }
+      p { font-size: 0.95rem !important; }
+    }
+    
+    /* Mobile Button Improvements */
+    @media (max-width: 768px) {
+      .btn {
+        padding: 10px 20px !important;
+        font-size: 0.9rem !important;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+    
+    /* Mobile Navigation Improvements */
+    @media (max-width: 1199px) {
+      .mobile-nav-toggle {
+        display: block !important;
+      }
+      
+      .header .btn-getstarted {
+        margin-right: 45px;
+      }
+    }
+    
+    /* Ensure mobile menu doesn't overlap content */
+    @media (max-width: 1199px) {
+      .mobile-nav-active .navmenu ul {
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+      }
+    }
+    
+    /* Mobile Sidebar Improvements */
+    @media (max-width: 768px) {
+      .sidebar {
+        margin-bottom: 30px;
+      }
+      
+      .content {
+        padding-left: 0 !important;
+      }
+    }
+    
+    /* Mobile Table Improvements */
+    @media (max-width: 768px) {
+      table {
+        font-size: 0.85rem;
+      }
+      
+      table th,
+      table td {
+        padding: 8px 4px !important;
+      }
+    }
+    
+    /* Mobile Image Improvements */
+    @media (max-width: 768px) {
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+
 </head>
 
 <body class="service-details-page">
@@ -34,24 +197,22 @@
   <header id="header" class="header d-flex align-items-center position-relative">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="../index.html" class="logo d-flex align-items-center me-auto me-lg-0">
-        <h1 class="sitename">DevTechAI</h1>
-        <span>.Org</span>
+      <a href="/" class="logo d-flex align-items-center me-auto me-lg-0"><img src="../assets/img/logo.png?v=2" alt="DevTechAI.Org Logo" class="logo-img"><h1 class="sitename">DevTechAI</h1><span>.Org</span>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="../index.html#hero">Home</a></li>
-          <li><a href="../index.html#about">About</a></li>
-          <li><a href="../index.html#services" class="active">Services</a></li>
-          <li><a href="../index.html#portfolio">Portfolio</a></li>
-          <li><a href="../index.html#team">Team</a></li>
-          <li><a href="../index.html#contact">Contact</a></li>
+          <li><a href="/#hero">Home</a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="/#services" class="active">Services</a></li>
+          <li><a href="/#portfolio">Portfolio</a></li>
+          <li><a href="/#team">Team</a></li>
+          <li><a href="/#contact">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="../index.html#contact">Get Started</a>
+      <a class="btn-getstarted" href="/#contact">Get Started</a>
 
     </div>
   </header>
@@ -73,8 +234,8 @@
       <nav class="breadcrumbs">
         <div class="container">
           <ol>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../index.html#services">Services</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#services">Services</a></li>
             <li class="current">AI Modernization</li>
           </ol>
         </div>
@@ -165,7 +326,7 @@
       <div class="container">
         <div class="row gy-4">
           <div class="col-lg-4 col-md-6 footer-about">
-            <a href="../index.html" class="logo d-flex align-items-center">
+            <a href="/" class="logo d-flex align-items-center">
               <span class="sitename">DevTechAI.Org</span>
             </a>
             <div class="footer-contact pt-3">
@@ -186,11 +347,11 @@
           <div class="col-lg-2 col-md-3 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bi bi-chevron-right"></i> <a href="../index.html#hero"> Home</a></li>
-              <li><i class="bi bi-chevron-right"></i> <a href="../index.html#about"> About us</a></li>
-              <li><i class="bi bi-chevron-right"></i> <a href="../index.html#services"> Services</a></li>
-              <li><i class="bi bi-chevron-right"></i> <a href="../index.html#portfolio"> Portfolio</a></li>
-              <li><i class="bi bi-chevron-right"></i> <a href="../index.html#contact"> Contact</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#hero"> Home</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#about"> About us</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#services"> Services</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#portfolio"> Portfolio</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#contact"> Contact</a></li>
             </ul>
           </div>
 
