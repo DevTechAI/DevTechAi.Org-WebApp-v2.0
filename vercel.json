@@ -1,33 +1,10 @@
 {
   "version": 2,
-  "buildCommand": "echo 'Static site - no build needed'",
+  "buildCommand": "echo 'Static site - files are already in public directory'",
   "outputDirectory": "public",
   "framework": null,
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/services/(.*)",
-      "dest": "/services/$1"
-    },
-    {
-      "src": "/portfolio/(.*)",
-      "dest": "/portfolio/$1"
-    },
-    {
-      "src": "/solutions/(.*)",
-      "dest": "/solutions/$1"
-    },
-    {
-      "src": "/(.*\\.(html|css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|json))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
+  "installCommand": "echo 'Skipping install for static site'",
+  "cleanUrls": false,
+  "trailingSlash": false
 }
 
