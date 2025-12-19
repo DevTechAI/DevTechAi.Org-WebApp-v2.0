@@ -21,11 +21,18 @@
         displayError(thisForm, 'The form action property is not set!');
         return;
       }
-      thisForm.querySelector('.loading').classList.add('d-block');
       thisForm.querySelector('.error-message').classList.remove('d-block');
       thisForm.querySelector('.sent-message').classList.remove('d-block');
 
       let formData = new FormData( thisForm );
+
+      // Show loading on button only (no separate loading div)
+      const submitBtn = thisForm.querySelector('button[type=submit]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.dataset.originalText = submitBtn.textContent;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+      }
 
       if ( recaptcha ) {
         if(typeof grecaptcha !== "undefined" ) {
@@ -63,15 +70,51 @@
       }
     })
     .then(data => {
-      thisForm.querySelector('.loading').classList.remove('d-block');
+      // No need to hide .loading div since we didn't show it
+      const submitBtn = thisForm.querySelector('button[type=submit]');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.originalText || 'Send';
+      }
+
       if (data.trim() == 'OK') {
-        thisForm.querySelector('.sent-message').classList.add('d-block');
-        thisForm.reset(); 
+        const sentEl = thisForm.querySelector('.sent-message');
+        try {
+          const name = formData.get('name') || 'friend';
+          sentEl.textContent = `Thanks, ${name}! We've got your details and will reach out shortly.`;
+        } catch (e) {
+          sentEl.textContent = "Thanks! We've got your details and will reach out shortly.";
+        }
+        // Show for ~3s then fade out smoothly
+        const showDelay = 3000;
+        const fadeDuration = 800;
+
+        sentEl.style.opacity = '0';
+        sentEl.style.transition = `opacity ${fadeDuration}ms ease`;
+        sentEl.classList.add('d-block');
+        void sentEl.offsetWidth;
+        sentEl.style.opacity = '1';
+
+        thisForm.reset();
+
+        setTimeout(() => {
+          sentEl.style.opacity = '0';
+          setTimeout(() => {
+            sentEl.classList.remove('d-block');
+            sentEl.style.opacity = '';
+            sentEl.style.transition = '';
+          }, fadeDuration);
+        }, showDelay);
       } else {
-        throw new Error(data ? data : 'Form submission failed and no error message returned from: ' + action); 
+        throw new Error(data ? data : 'Form submission failed and no error message returned from: ' + action);
       }
     })
     .catch((error) => {
+      const submitBtn = thisForm.querySelector('button[type=submit]');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.originalText || 'Send';
+      }
       displayError(thisForm, error);
     });
   }
