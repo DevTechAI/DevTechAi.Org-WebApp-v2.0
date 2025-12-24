@@ -47,7 +47,6 @@ app.get('/api', (req: Request, res: Response) => {
     }
   });
 });
-
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error('Error:', err);
