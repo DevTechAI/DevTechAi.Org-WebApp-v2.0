@@ -57,18 +57,36 @@
     })
     .then(response => {
       if( response.ok ) {
-        return response.text();
+        // Try to parse as JSON first, fallback to text
+        return response.text().then(text => {
+          try {
+            return JSON.parse(text);
+          } catch {
+            return text;
+          }
+        });
       } else {
         throw new Error(`${response.status} ${response.statusText} ${response.url}`); 
       }
     })
     .then(data => {
       thisForm.querySelector('.loading').classList.remove('d-block');
-      if (data.trim() == 'OK') {
+      
+      // Handle JSON response from our API
+      if (typeof data === 'object' && data.success) {
+        thisForm.querySelector('.sent-message').classList.add('d-block');
+        thisForm.reset();
+      } 
+      // Handle legacy "OK" response
+      else if (typeof data === 'string' && data.trim() == 'OK') {
         thisForm.querySelector('.sent-message').classList.add('d-block');
         thisForm.reset(); 
       } else {
-        throw new Error(data ? data : 'Form submission failed and no error message returned from: ' + action); 
+        // If it's an error object, show the message
+        const errorMessage = (typeof data === 'object' && data.message) 
+          ? data.message 
+          : (data || 'Form submission failed and no error message returned from: ' + action);
+        throw new Error(errorMessage); 
       }
     })
     .catch((error) => {
