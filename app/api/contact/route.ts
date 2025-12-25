@@ -1,59 +1,65 @@
+import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_ANON_KEY || ''
+);
 
 export async function POST(request: NextRequest) {
   try {
-    let body: any;
-    
-    // Handle both JSON and form-encoded data
-    const contentType = request.headers.get('content-type');
-    
-    if (contentType?.includes('application/json')) {
+    const contentType = request.headers.get('content-type') || '';
+    let body: any = {};
+
+    if (contentType.includes('application/json')) {
       body = await request.json();
-    } else if (contentType?.includes('application/x-www-form-urlencoded')) {
-      const formData = await request.formData();
-      body = {
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        subject: formData.get('subject') as string,
-        message: formData.get('message') as string,
-      };
     } else {
-      // Try to parse as form data by default
-      const formData = await request.formData();
-      body = {
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        subject: formData.get('subject') as string,
-        message: formData.get('message') as string,
-      };
+      // support form submissions (application/x-www-form-urlencoded or multipart/form-data)
+      try {
+        const form = await request.formData();
+        body = Object.fromEntries(form.entries());
+      } catch (e) {
+        try {
+          body = await request.json();
+        } catch (_) {
+          body = {};
+        }
+      }
     }
-    
-    console.log('📨 Next.js API received:', body);
-    
-    // Forward the request to our Express API server
-    const response = await fetch('http://localhost:8001/api/contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      console.log('❌ Express API error:', data);
-      return NextResponse.json(data, { status: response.status });
+
+    const name = (body.name || '').toString();
+    const email = (body.email || '').toString();
+    const subject = (body.subject || '').toString();
+    const message = (body.message || '').toString();
+
+    const isXhr = (request.headers.get('x-requested-with') || '').toLowerCase() === 'xmlhttprequest';
+
+    if (!name || !email || !message) {
+      const errMsg = 'name, email and message are required';
+      if (isXhr) return new Response(errMsg, { status: 400, headers: { 'Content-Type': 'text/plain' } });
+      return NextResponse.json({ error: errMsg }, { status: 400 });
     }
-    
-    console.log('✅ Success from Express API:', data);
-    return NextResponse.json(data);
-    
-  } catch (error: any) {
-    console.error('❌ Next.js API proxy error:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error', message: 'Failed to submit contact form' },
-      { status: 500 }
-    );
+
+    const { data, error } = await supabase
+      .from('contacts')
+      .insert([{ name, email, subject, message }])
+      .select();
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      const errMsg = 'Failed to save contact';
+      if (isXhr) return new Response(errMsg, { status: 500, headers: { 'Content-Type': 'text/plain' } });
+      return NextResponse.json({ error: errMsg }, { status: 500 });
+    }
+
+    if (isXhr) {
+      // php-email-form expects plain text 'OK' on success
+      return new Response('OK', { status: 200, headers: { 'Content-Type': 'text/plain' } });
+    }
+
+    return NextResponse.json({ message: 'Contact saved', data }, { status: 200 });
+  } catch (err) {
+    console.error('API error:', err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
