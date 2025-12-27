@@ -188,6 +188,32 @@
         height: auto;
       }
     }
+    
+    /* Services List One by One */
+    .services-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .services-list a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .services-list a:hover {
+      background-color: rgba(255, 196, 81, 0.1);
+      padding-left: 15px;
+    }
+    
+    .services-list a i {
+      color: #ffc451;
+      font-size: 1.2em;
+    }
   </style>
 
 </head>
@@ -281,7 +307,7 @@
             </div>
 
             <div class="help-box d-flex flex-column justify-content-center align-items-center">
-              <i class="bi bi-headset"></i>
+              <i class="bi bi-headset flex-shrink-0" style="font-size: 3em; color: #ffc451;"></i>
               <h4>Need Help?</h4>
               <p>Our team is here to help you implement the best solutions for your business.</p>
               <a href="/#contact" class="btn-get-started">Contact Us</a>
@@ -349,10 +375,10 @@
               <p><strong>Phone:</strong> <span>+91 7794841440</span></p>
             </div>
             <div class="social-links d-flex mt-4">
-              <a href=""><i class="bi bi-twitter-x"></i></a>
-              <a href=""><i class="bi bi-facebook"></i></a>
-              <a href=""><i class="bi bi-instagram"></i></a>
-              <a href=""><i class="bi bi-linkedin"></i></a>
+              <a href="" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+              <a href="" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/devtechai_labs_official/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/devtechai-org/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
             </div>
           </div>
 

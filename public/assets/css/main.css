@@ -1684,6 +1684,13 @@ section,
   padding: 30px 15px;
 }
 
+.service-details .help-box i {
+  font-size: 48px;
+  color: var(--accent-color);
+  margin-right: 15px;
+  line-height: 0;
+}
+
 .service-details .help-box .help-icon {
   font-size: 48px;
 }
@@ -1695,6 +1702,13 @@ section,
 
 .service-details .services-img {
   margin-bottom: 20px;
+}
+
+.service-details .service-heading i {
+  font-size: 48px;
+  color: var(--accent-color);
+  margin-right: 15px;
+  line-height: 0;
 }
 
 .service-details h3 {
