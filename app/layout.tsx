@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'DevTechAI.Org - AI-Powered Solutions',
+  title: 'DevTechAi.Org',
   description: 'FullStack Apps modernization with GenAI, AgenticAI multi-model features',
 };
 
@@ -16,4 +16,3 @@ export default function RootLayout({
     </html>
   );
 }
-

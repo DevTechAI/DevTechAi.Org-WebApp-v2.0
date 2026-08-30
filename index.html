@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>DevTechAI - Advanced AI Solutions</title>
+  <title>DevTechAi.Org</title>
   <meta name="description" content="DevTechAI provides powerful AI solutions, workflow automation, and cloud integrations for modern businesses.">
   <meta name="keywords" content="AI, artificial intelligence, workflow automation, cloud solutions, DevTechAI">
 
   <!-- Favicons -->
-  <link href="/images/logos/DevTechAi_Logo-cropped.svg" rel="icon" type="image/svg+xml">
+  <link href="assets/images/favicon-rounded.png" rel="icon" type="image/png">
 
 
 
@@ -29,6 +29,7 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/main-ui.css" rel="stylesheet">
   
   <!-- Mobile Responsive Enhancements -->
   <style>
@@ -173,20 +174,19 @@
 
 <body class="index-page">
 
-  <header id="header" class="header d-flex align-items-center fixed-top">
+  <header id="header" class="header d-flex align-items-center fixed-top main-ui-header">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="/" class="logo d-flex align-items-center me-auto me-lg-0">
-        <img src="/images/logos/DevTechAi_Logo-cropped.svg" alt="DevTechAI.Org Logo" class="logo-img">
-        <h1 class="sitename">DevTechAI</h1>
-        <span>.Org</span>
+        <img src="assets/images/New_Logo.png" alt="DevTechAI.Org logo" class="logo-img">
+        <span class="brand-lockup"><strong>DEVTECH<span>AI</span>.ORG</strong><small>AI LAB FOR COMMUNITY</small></span>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="#hero" class="active">Home<br></a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
+          <li><a href="#services">AI Innovation</a></li>
           <li class="dropdown"><a href="#"><span>Solutions</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="solutions/ai-solutions.html">AI Solutions</a></li>
@@ -208,60 +208,41 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
+      <button class="ui-theme-toggle" id="ui-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to Main UI version 2">
+        <span>UI</span><b>V1</b><i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+      </button>
+      <a class="header-cta" href="#contact">Get Involved <i class="bi bi-arrow-right"></i></a>
+
     </div>
   </header>
 
   <main class="main">
 
     <!-- Hero Section -->
-    <section id="hero" class="hero section dark-background">
-
-      <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
-
-      <div class="container">
-
-        <div class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
-          <div class="col-xl-6 col-lg-8">
-            <h2>Powerful AI Solutions With DevTechAI<span>.</span></h2>
-            <p>We are team of talented AI engineers and cloud architects</p>
-          </div>
-        </div>
-
-        <div class="row gy-4 mt-5 justify-content-center" data-aos="fade-up" data-aos-delay="200">
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="300">
-            <div class="icon-box">
-              <i class="bi bi-robot"></i>
-              <h3><a href="#ai-modernization">AI Modernization</a></h3>
-            </div>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="400">
-            <div class="icon-box">
-              <i class="bi bi-gear-fill"></i>
-              <h3><a href="#workflow-automation">Workflow Automation</a></h3>
-            </div>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="500">
-            <div class="icon-box">
-              <i class="bi bi-cloud-fill"></i>
-              <h3><a href="#cloud-services">Cloud Services</a></h3>
-            </div>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="600">
-            <div class="icon-box">
-              <i class="bi bi-graph-up"></i>
-              <h3><a href="#monitoring">Monitoring</a></h3>
-            </div>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="700">
-            <div class="icon-box">
-              <i class="bi bi-shield-check"></i>
-              <h3><a href="#security">Security</a></h3>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
+    <section id="hero" class="hero section main-ui-hero" aria-label="DevTechAI introduction">
+      <img id="main-ui-image" src="assets/images/Main_UI_v1.png" alt="DevTechAI community landing page" class="main-ui-canvas">
+      <div class="main-ui-light" aria-hidden="true"></div>
+      <div class="hero-wave-motion" aria-hidden="true"></div>
+      <a class="header-logo-replacement" href="#hero" aria-label="DevTechAI home">
+        <img src="assets/images/favicon-rounded.png" alt="DevTechAI logo">
+      </a>
+      <nav class="main-ui-hotspots" aria-label="Main landing page navigation">
+        <a class="hotspot hotspot-home" href="#hero"><span>Home</span></a>
+        <a class="hotspot hotspot-about" href="#about"><span>About</span></a>
+        <a class="hotspot hotspot-mission" href="#services"><span>Our mission</span></a>
+        <a class="hotspot hotspot-programs" href="#services"><span>Programs</span></a>
+        <a class="hotspot hotspot-community" href="#about"><span>Community</span></a>
+        <a class="hotspot hotspot-resources" href="#services"><span>Resources</span></a>
+        <a class="hotspot hotspot-contact" href="#contact"><span>Contact</span></a>
+        <a class="hotspot hotspot-involved" href="#contact"><span>Get involved</span></a>
+        <a class="hotspot hotspot-join" href="#contact"><span>Join our community</span></a>
+        <a class="hotspot hotspot-explore" href="#services"><span>Explore programs</span></a>
+        <a class="hotspot hotspot-ai" href="#services"><span>AI innovation</span></a>
+        <a class="hotspot hotspot-community-value" href="#about"><span>Community</span></a>
+        <a class="hotspot hotspot-technology" href="#services"><span>Technology</span></a>
+        <a class="hotspot hotspot-impact" href="#contact"><span>Impact</span></a>
+      </nav>
+      <span id="frame-label" class="visually-hidden" aria-live="polite">Main UI version 1</span>
     </section><!-- /Hero Section -->
 
     <!-- About Section -->
@@ -801,7 +782,7 @@
         <div class="row gy-4">
           <div class="col-lg-4 col-md-6 footer-about">
             <a href="/" class="logo d-flex align-items-center">
-              <img src="/images/logos/DevTechAi_Logo-cropped.svg" alt="DevTechAI.Org Logo" class="logo-img" style="height: 30px; margin-right: 8px;">
+              <img src="assets/images/New_Logo.png" alt="DevTechAI.Org logo" class="logo-img" style="height: 30px; margin-right: 8px;">
               <span class="sitename">DevTechAI.Org</span>
             </a>
             <div class="footer-contact pt-3">
@@ -883,6 +864,7 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/main-ui-toggle.js"></script>
 
 </body>
 

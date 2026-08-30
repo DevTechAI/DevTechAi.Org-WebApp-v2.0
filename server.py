@@ -97,16 +97,27 @@ class DevTechAIHandler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(json.dumps(data).encode())
     
     def log_message(self, format, *args):
-        """Custom log message format"""
-        sys.stderr.write(f"[DevTechAI Server] {format % args}\n")
+        """Only surface failed HTTP requests; successful asset loads stay quiet."""
+        try:
+            status_code = int(args[1])
+        except (IndexError, TypeError, ValueError):
+            status_code = 500
+
+        if status_code >= 400:
+            sys.stderr.write(f"[DevTechAI Server] {format % args}\n")
+
+
+class ReusableTCPServer(socketserver.TCPServer):
+    """Allow the development server to restart without waiting for a stale socket."""
+    allow_reuse_address = True
 
 def main():
     """Main function to start the server"""
-    PORT = 8000
+    PORT = int(os.environ.get("PORT", "8000"))
     
     # Check if port is available
     try:
-        with socketserver.TCPServer(("", PORT), DevTechAIHandler) as httpd:
+        with ReusableTCPServer(("", PORT), DevTechAIHandler) as httpd:
             print(f"🚀 DevTechAI WebApp v2.0 Server starting...")
             print(f"📡 Server running at http://localhost:{PORT}")
             print(f"📁 Serving files from: {os.getcwd()}")
