@@ -1,0 +1,126 @@
+/*--------------------------------------------------------------
+# Brand Header
+--------------------------------------------------------------*/
+:root {
+  --dta-navy: #0f1f4b;
+  --dta-navy-deep: #0a1838;
+  --dta-maroon: #8b1020;
+  --dta-maroon-hover: #a3172b;
+  --dta-orange: #f28c1b;
+  --dta-ink: #1f2a44;
+}
+
+/* Header
+------------------------------*/
+.dta-header,
+.index-page .dta-header,
+.index-page.scrolled .dta-header {
+  --background-color: #ffffff;
+  --nav-color: var(--dta-ink);
+  --nav-hover-color: var(--dta-navy);
+  --nav-dropdown-hover-color: rgba(242, 140, 27, 0.12);
+  padding: 12px 0;
+  box-shadow: 0 2px 18px rgba(15, 31, 75, 0.08);
+}
+
+.dta-header .dta-brand-emblem {
+  width: 56px;
+  height: 56px;
+  max-height: none;
+  margin-right: 12px;
+  object-fit: contain;
+}
+
+.dta-header .logo .dta-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  font-size: inherit;
+  color: inherit;
+}
+
+.dta-header .logo .dta-brand-name {
+  font-family: "Poppins", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--dta-navy);
+}
+
+.dta-header .logo .dta-brand-ai {
+  font-size: inherit;
+  color: var(--dta-maroon);
+}
+
+.dta-header .logo .dta-brand-tagline {
+  font-family: "Poppins", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--dta-navy);
+}
+
+@media (min-width: 1200px) {
+  .dta-header .navmenu a,
+  .dta-header .navmenu a:focus {
+    font-size: 15px;
+    font-weight: 500;
+    padding: 18px 20px;
+  }
+
+  .dta-header .navmenu > ul > li > a {
+    position: relative;
+  }
+
+  .dta-header .navmenu > ul > li > a::after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 10px;
+    height: 2px;
+    background: var(--dta-orange);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .dta-header .navmenu > ul > li > a.active::after,
+  .dta-header .navmenu > ul > li:hover > a::after {
+    transform: scaleX(1);
+  }
+}
+
+.dta-header .btn-getstarted.dta-header-cta,
+.dta-header .btn-getstarted.dta-header-cta:focus {
+  color: #ffffff;
+  background: var(--dta-maroon);
+  border: 2px solid var(--dta-maroon);
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 9px 24px;
+}
+
+.dta-header .btn-getstarted.dta-header-cta:hover {
+  color: #ffffff;
+  background: var(--dta-maroon-hover);
+  border-color: var(--dta-maroon-hover);
+}
+
+@media (max-width: 768px) {
+  .dta-header .dta-brand-emblem {
+    width: 44px;
+    height: 44px;
+    margin-right: 8px;
+  }
+
+  .dta-header .logo .dta-brand-name {
+    font-size: 17px;
+    letter-spacing: 1.2px;
+  }
+
+  .dta-header .logo .dta-brand-tagline {
+    font-size: 9px;
+    letter-spacing: 1.2px;
+  }
+}

@@ -27,6 +27,8 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/brand-header.css" rel="stylesheet">
+  <link href="assets/css/landing-hero.css" rel="stylesheet">
   
   <!-- Mobile Responsive Enhancements -->
   <style>
@@ -171,21 +173,25 @@
 
 <body class="index-page">
 
-  <header id="header" class="header d-flex align-items-center fixed-top">
+  <header id="header" class="header dta-header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="/" class="logo d-flex align-items-center me-auto me-lg-0">
-        <img src="/images/logos/DevTechAi_Logo-cropped.svg" alt="DevTechAI.Org Logo" class="logo-img">
-        <h1 class="sitename">DevTechAI</h1>
-        <span>.Org</span>
+      <a href="/" class="logo dta-brand d-flex align-items-center me-auto me-xl-0">
+        <img src="/images/logos/dtai-emblem.png" alt="DevTechAI.Org Logo" class="dta-brand-emblem">
+        <span class="dta-brand-text">
+          <span class="dta-brand-name">DEVTECH<span class="dta-brand-ai">AI</span>.ORG</span>
+          <span class="dta-brand-tagline">AI Lab for Community</span>
+        </span>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="#hero" class="active">Home<br></a></li>
+          <li><a href="#hero" class="active">Home</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li class="dropdown"><a href="#"><span>Solutions</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <li><a href="#features">Our Mission</a></li>
+          <li><a href="#services">Programs</a></li>
+          <li><a href="#testimonials">Community</a></li>
+          <li class="dropdown"><a href="#"><span>Resources</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="solutions/ai-solutions.html">AI Solutions</a></li>
               <li class="dropdown"><a href="#"><span>Workflow Automation</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -206,61 +212,250 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
+      <a class="btn-getstarted dta-header-cta" href="#contact">Get Involved</a>
+
     </div>
   </header>
 
   <main class="main">
 
     <!-- Hero Section -->
-    <section id="hero" class="hero section dark-background">
+    <section id="hero" class="dta-hero">
 
-      <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
+      <div class="dta-hero-bg" aria-hidden="true">
+        <svg class="dta-hero-circuit" viewBox="0 0 420 360" fill="none">
+          <g stroke="#8d99b8" stroke-width="1">
+            <path d="M0 40 H120 L150 70 H260"/>
+            <path d="M0 78 H90 L118 106 H200 L222 128 H300"/>
+            <path d="M0 116 H60 L84 140 H150"/>
+            <path d="M40 0 V24 L64 48 V150"/>
+            <path d="M180 0 V30 L200 50 H340"/>
+            <path d="M0 170 H40 L64 194 H110"/>
+          </g>
+          <g fill="#8d99b8">
+            <circle cx="260" cy="70" r="3"/>
+            <circle cx="300" cy="128" r="3"/>
+            <circle cx="150" cy="140" r="3"/>
+            <circle cx="64" cy="150" r="3"/>
+            <circle cx="340" cy="50" r="3"/>
+            <circle cx="110" cy="194" r="3"/>
+          </g>
+          <circle cx="12" cy="250" r="4" fill="#f28c1b"/>
+          <circle cx="30" cy="292" r="3" fill="#a3172b"/>
+        </svg>
 
-      <div class="container">
+        <svg class="dta-hero-waves" viewBox="0 0 1440 760" preserveAspectRatio="xMaxYMax slice">
+          <defs>
+            <linearGradient id="dtaNavy" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1b3a7a"/>
+              <stop offset="0.55" stop-color="#0d1f4d"/>
+              <stop offset="1" stop-color="#081538"/>
+            </linearGradient>
+            <linearGradient id="dtaOrange" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffb347" stop-opacity="0"/>
+              <stop offset="0.35" stop-color="#ffa53a"/>
+              <stop offset="1" stop-color="#f07d12"/>
+            </linearGradient>
+            <linearGradient id="dtaMaroon" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#6d0c1c"/>
+              <stop offset="1" stop-color="#a3172b"/>
+            </linearGradient>
+            <linearGradient id="dtaSheen" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.2"/>
+            </linearGradient>
+            <linearGradient id="dtaWaveLine" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="0.3" stop-color="#ffffff" stop-opacity="0.6"/>
+              <stop offset="0.65" stop-color="#ffb347" stop-opacity="0.9"/>
+              <stop offset="1" stop-color="#f28c1b" stop-opacity="0.4"/>
+            </linearGradient>
+            <clipPath id="dtaNavyClip">
+              <path d="M1410 0 C1290 180 1140 390 900 530 C700 645 480 705 260 760 L1440 760 L1440 0 Z"/>
+            </clipPath>
+            <filter id="dtaBlur" x="-10%" y="-10%" width="120%" height="120%">
+              <feGaussianBlur stdDeviation="6"/>
+            </filter>
+          </defs>
 
-        <div class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
-          <div class="col-xl-6 col-lg-8">
-            <h2>Powerful AI Solutions With DevTechAI<span>.</span></h2>
-            <p>We are team of talented AI engineers and cloud architects</p>
+          <path d="M1410 0 C1290 180 1140 390 900 530 C700 645 480 705 260 760 L1440 760 L1440 0 Z" fill="url(#dtaNavy)"/>
+          <path d="M1410 0 C1290 180 1140 390 900 530 C700 645 480 705 260 760" stroke="url(#dtaSheen)" stroke-width="10" fill="none" filter="url(#dtaBlur)"/>
+
+          <g clip-path="url(#dtaNavyClip)">
+            <g class="dta-waves" fill="none" stroke-linecap="round" transform="rotate(-24 1150 330)">
+              <path class="dta-wave dta-wave-slow" d="M600 80 q60 -40 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="url(#dtaWaveLine)" stroke-width="1.6"/>
+              <path class="dta-wave dta-wave-dots" d="M600 130 q60 -50 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="#ffffff" stroke-width="2.4" stroke-dasharray="0.1 10"/>
+              <path class="dta-wave dta-wave-slow" d="M600 180 q60 -46 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="url(#dtaWaveLine)" stroke-width="2"/>
+              <path class="dta-wave dta-wave-mid" d="M600 230 q60 -60 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="url(#dtaWaveLine)" stroke-width="1.6"/>
+              <path class="dta-wave dta-wave-dots" d="M600 280 q60 -64 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="#ffb347" stroke-width="3" stroke-dasharray="0.1 9"/>
+              <path class="dta-wave dta-wave-slow" d="M600 330 q60 -54 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="url(#dtaWaveLine)" stroke-width="2.2"/>
+              <path class="dta-wave dta-wave-dots dta-wave-mid" d="M600 380 q60 -50 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="#ffffff" stroke-width="2.6" stroke-dasharray="0.1 11"/>
+              <path class="dta-wave dta-wave-fast" d="M600 430 q60 -62 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="url(#dtaWaveLine)" stroke-width="1.6"/>
+              <path class="dta-wave dta-wave-slow" d="M600 480 q60 -40 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="url(#dtaWaveLine)" stroke-width="2"/>
+              <path class="dta-wave dta-wave-dots dta-wave-fast" d="M600 530 q60 -48 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="#ffb347" stroke-width="2.6" stroke-dasharray="0.1 10"/>
+              <path class="dta-wave dta-wave-mid" d="M600 580 q60 -44 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0" stroke="url(#dtaWaveLine)" stroke-width="1.6"/>
+            </g>
+            <g class="dta-stars">
+              <circle cx="1180" cy="210" r="2.2" fill="#ffb347"/>
+              <circle cx="1230" cy="260" r="1.4" fill="#fff"/>
+              <circle cx="1270" cy="190" r="1.8" fill="#ffb347"/>
+              <circle cx="1310" cy="240" r="1.2" fill="#fff"/>
+              <circle cx="1350" cy="170" r="2.4" fill="#f28c1b"/>
+              <circle cx="1390" cy="230" r="1.4" fill="#fff"/>
+              <circle cx="1420" cy="150" r="1.8" fill="#ffb347"/>
+              <circle cx="1200" cy="320" r="1.6" fill="#fff"/>
+              <circle cx="1250" cy="350" r="2.2" fill="#ffb347"/>
+              <circle cx="1300" cy="310" r="1.4" fill="#fff"/>
+              <circle cx="1340" cy="360" r="1.9" fill="#f28c1b"/>
+              <circle cx="1380" cy="300" r="1.2" fill="#fff"/>
+              <circle cx="1415" cy="340" r="2" fill="#ffb347"/>
+              <circle cx="1150" cy="400" r="1.3" fill="#fff"/>
+              <circle cx="1190" cy="440" r="1.8" fill="#ffb347"/>
+              <circle cx="1240" cy="420" r="1.2" fill="#fff"/>
+              <circle cx="1290" cy="450" r="2.1" fill="#f28c1b"/>
+              <circle cx="1330" cy="410" r="1.4" fill="#fff"/>
+              <circle cx="1370" cy="440" r="1.7" fill="#ffb347"/>
+              <circle cx="1405" cy="400" r="1.2" fill="#fff"/>
+              <circle cx="1320" cy="120" r="1.3" fill="#fff"/>
+              <circle cx="1375" cy="90" r="1.6" fill="#ffb347"/>
+              <circle cx="1100" cy="470" r="1.6" fill="#fff"/>
+              <circle cx="1060" cy="500" r="1.2" fill="#ffb347"/>
+              <circle cx="1270" cy="500" r="1.3" fill="#fff"/>
+              <circle cx="1430" cy="480" r="1.6" fill="#ffb347"/>
+              <circle cx="1211" cy="164" r="1.4" fill="#ffffff" style="animation-delay:0.3s;animation-duration:3.8s"/>
+              <circle cx="1254" cy="69" r="2.3" fill="#ffffff" style="animation-delay:0.1s;animation-duration:3.6s"/>
+              <circle cx="951" cy="256" r="0.9" fill="#f28c1b" style="animation-delay:0.2s;animation-duration:3.9s"/>
+              <circle cx="1108" cy="73" r="1.7" fill="#f28c1b" style="animation-delay:0.2s;animation-duration:3.1s"/>
+              <circle cx="1016" cy="306" r="1.5" fill="#ffd59a" style="animation-delay:0.5s;animation-duration:3.3s"/>
+              <circle cx="1065" cy="115" r="1.7" fill="#ffffff" style="animation-delay:1.5s;animation-duration:3.9s"/>
+              <circle cx="944" cy="587" r="0.9" fill="#ffffff" style="animation-delay:2.0s;animation-duration:3.8s"/>
+              <circle cx="1201" cy="486" r="1.7" fill="#f28c1b" style="animation-delay:1.4s;animation-duration:3.1s"/>
+              <circle cx="1064" cy="259" r="0.9" fill="#ffb347" style="animation-delay:2.1s;animation-duration:4.7s"/>
+              <circle cx="1339" cy="304" r="1.8" fill="#ffffff" style="animation-delay:0.5s;animation-duration:3.5s"/>
+              <circle cx="1230" cy="165" r="2.3" fill="#f28c1b" style="animation-delay:0.2s;animation-duration:4.2s"/>
+              <circle cx="1201" cy="358" r="1.9" fill="#ffd59a" style="animation-delay:2.0s;animation-duration:4.5s"/>
+              <circle cx="950" cy="105" r="2.3" fill="#f28c1b" style="animation-delay:2.8s;animation-duration:2.7s"/>
+              <circle cx="1197" cy="466" r="1.3" fill="#f28c1b" style="animation-delay:3.5s;animation-duration:3.4s"/>
+              <circle cx="1352" cy="373" r="1.1" fill="#ffffff" style="animation-delay:2.0s;animation-duration:3.0s"/>
+              <circle cx="1174" cy="142" r="2.0" fill="#f28c1b" style="animation-delay:1.6s;animation-duration:4.7s"/>
+              <circle cx="962" cy="180" r="1.5" fill="#ffd59a" style="animation-delay:1.1s;animation-duration:2.8s"/>
+              <circle cx="1320" cy="573" r="1.2" fill="#f28c1b" style="animation-delay:3.9s;animation-duration:4.2s"/>
+              <circle cx="1269" cy="246" r="1.0" fill="#ffffff" style="animation-delay:0.6s;animation-duration:4.1s"/>
+              <circle cx="892" cy="506" r="2.1" fill="#ffffff" style="animation-delay:1.1s;animation-duration:2.5s"/>
+              <circle cx="1309" cy="557" r="1.4" fill="#ffd59a" style="animation-delay:1.3s;animation-duration:2.8s"/>
+              <circle cx="1407" cy="65" r="1.5" fill="#ffd59a" style="animation-delay:1.6s;animation-duration:3.5s"/>
+              <circle cx="986" cy="503" r="1.8" fill="#ffffff" style="animation-delay:0.8s;animation-duration:5.0s"/>
+              <circle cx="1331" cy="176" r="1.0" fill="#ffd59a" style="animation-delay:0.2s;animation-duration:2.5s"/>
+              <circle cx="1034" cy="559" r="1.0" fill="#ffb347" style="animation-delay:2.5s;animation-duration:2.7s"/>
+              <circle cx="1092" cy="395" r="1.0" fill="#ffb347" style="animation-delay:3.8s;animation-duration:4.0s"/>
+              <circle cx="1365" cy="135" r="1.0" fill="#f28c1b" style="animation-delay:4.0s;animation-duration:3.7s"/>
+              <circle cx="1375" cy="329" r="0.9" fill="#ffffff" style="animation-delay:3.0s;animation-duration:4.4s"/>
+              <circle cx="1370" cy="175" r="1.6" fill="#ffffff" style="animation-delay:3.8s;animation-duration:3.8s"/>
+              <circle cx="1030" cy="566" r="2.3" fill="#ffd59a" style="animation-delay:1.2s;animation-duration:4.1s"/>
+              <circle cx="973" cy="277" r="1.6" fill="#ffffff" style="animation-delay:1.4s;animation-duration:3.1s"/>
+              <circle cx="1434" cy="524" r="1.3" fill="#ffffff" style="animation-delay:2.5s;animation-duration:4.5s"/>
+              <circle cx="1079" cy="255" r="2.1" fill="#ffffff" style="animation-delay:0.8s;animation-duration:3.7s"/>
+              <circle cx="909" cy="38" r="2.1" fill="#f28c1b" style="animation-delay:1.0s;animation-duration:4.2s"/>
+              <circle cx="1232" cy="467" r="2.1" fill="#ffb347" style="animation-delay:3.8s;animation-duration:3.4s"/>
+              <circle cx="1105" cy="114" r="1.2" fill="#ffffff" style="animation-delay:1.4s;animation-duration:3.7s"/>
+              <circle cx="881" cy="500" r="2.3" fill="#ffb347" style="animation-delay:3.2s;animation-duration:2.7s"/>
+              <circle cx="1002" cy="407" r="2.1" fill="#ffffff" style="animation-delay:1.9s;animation-duration:2.9s"/>
+              <circle cx="1220" cy="98" r="2.1" fill="#f28c1b" style="animation-delay:1.9s;animation-duration:4.4s"/>
+              <circle cx="966" cy="172" r="1.1" fill="#ffffff" style="animation-delay:0.1s;animation-duration:4.0s"/>
+              <circle cx="1356" cy="159" r="1.8" fill="#ffd59a" style="animation-delay:3.9s;animation-duration:4.1s"/>
+              <circle cx="985" cy="549" r="2.0" fill="#ffffff" style="animation-delay:1.7s;animation-duration:4.7s"/>
+              <circle cx="1096" cy="38" r="1.2" fill="#ffb347" style="animation-delay:2.0s;animation-duration:4.4s"/>
+              <circle cx="1213" cy="275" r="1.7" fill="#ffffff" style="animation-delay:0.2s;animation-duration:4.3s"/>
+              <circle cx="1349" cy="539" r="1.5" fill="#ffd59a" style="animation-delay:0.5s;animation-duration:2.9s"/>
+              <circle cx="1402" cy="29" r="2.2" fill="#ffffff" style="animation-delay:2.4s;animation-duration:4.4s"/>
+              <circle cx="1033" cy="186" r="1.0" fill="#ffd59a" style="animation-delay:2.9s;animation-duration:3.9s"/>
+              <circle cx="1213" cy="540" r="1.6" fill="#f28c1b" style="animation-delay:3.1s;animation-duration:2.8s"/>
+              <circle cx="938" cy="264" r="1.1" fill="#ffffff" style="animation-delay:3.1s;animation-duration:3.8s"/>
+              <circle cx="908" cy="74" r="1.5" fill="#ffd59a" style="animation-delay:3.9s;animation-duration:4.0s"/>
+              <circle cx="1084" cy="293" r="1.5" fill="#ffd59a" style="animation-delay:3.2s;animation-duration:3.8s"/>
+              <circle cx="1133" cy="545" r="2.2" fill="#ffb347" style="animation-delay:3.7s;animation-duration:4.7s"/>
+              <circle cx="1087" cy="468" r="1.0" fill="#ffffff" style="animation-delay:1.6s;animation-duration:3.3s"/>
+              <circle cx="1038" cy="384" r="1.0" fill="#ffffff" style="animation-delay:3.9s;animation-duration:3.0s"/>
+              <circle cx="976" cy="417" r="2.2" fill="#ffffff" style="animation-delay:4.0s;animation-duration:4.6s"/>
+              <circle cx="1045" cy="451" r="2.4" fill="#f28c1b" style="animation-delay:1.4s;animation-duration:3.0s"/>
+              <circle cx="1206" cy="104" r="2.0" fill="#ffffff" style="animation-delay:1.4s;animation-duration:3.6s"/>
+              <circle cx="898" cy="403" r="1.3" fill="#ffd59a" style="animation-delay:1.2s;animation-duration:4.9s"/>
+              <circle cx="995" cy="244" r="2.4" fill="#ffffff" style="animation-delay:0.3s;animation-duration:3.2s"/>
+              <circle cx="1065" cy="286" r="2.0" fill="#f28c1b" style="animation-delay:3.4s;animation-duration:4.2s"/>
+              <circle cx="1144" cy="425" r="1.0" fill="#ffd59a" style="animation-delay:2.3s;animation-duration:4.3s"/>
+              <circle cx="897" cy="100" r="2.1" fill="#ffffff" style="animation-delay:2.4s;animation-duration:3.1s"/>
+              <circle cx="1150" cy="134" r="1.5" fill="#ffb347" style="animation-delay:4.0s;animation-duration:3.5s"/>
+              <circle cx="1148" cy="61" r="1.1" fill="#ffb347" style="animation-delay:2.5s;animation-duration:3.8s"/>
+              <circle cx="1090" cy="306" r="1.5" fill="#ffffff" style="animation-delay:1.1s;animation-duration:4.5s"/>
+            </g>
+            <g fill="none" stroke="#ffb347" stroke-opacity="0.25" stroke-width="0.8">
+              <path d="M1180 210 L1270 190 L1350 170 L1420 150"/>
+              <path d="M1250 350 L1340 360 L1415 340"/>
+              <path d="M1190 440 L1290 450 L1370 440"/>
+              <path d="M1270 190 L1250 350 L1290 450"/>
+            </g>
+          </g>
+
+          <path d="M330 760 C700 680 1060 600 1440 450 L1440 490 C1080 630 740 715 440 760 Z" fill="url(#dtaOrange)"/>
+          <path d="M760 760 C1040 690 1270 610 1440 545 L1440 760 Z" fill="url(#dtaMaroon)"/>
+        </svg>
+      </div>
+
+      <div class="container position-relative">
+        <div class="row align-items-center gy-5">
+          <div class="col-lg-6 dta-hero-copy" data-aos="fade-up" data-aos-delay="100">
+            <h1 class="dta-hero-title">
+              <span class="dta-text-navy">Innovate.</span>
+              <span class="dta-text-maroon">Empower.</span>
+              <span class="dta-text-orange">Build the Future.</span>
+            </h1>
+            <p class="dta-hero-lead">
+              DevTechAI.org is an AI Lab for Community.
+              We innovate, empower and build technology solutions that create real impact.
+            </p>
+            <div class="dta-hero-actions">
+              <a href="#contact" class="dta-btn dta-btn-primary">Join Our Community <i class="bi bi-arrow-right"></i></a>
+              <a href="#services" class="dta-btn dta-btn-outline">Explore Programs <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-6 dta-hero-visual" data-aos="zoom-in" data-aos-delay="200">
+            <div class="dta-emblem-wrap">
+              <img src="/images/logos/dtai-emblem.png" alt="DevTechAI.Org – AI Lab for Community emblem" class="dta-emblem">
+            </div>
           </div>
         </div>
-
-        <div class="row gy-4 mt-5 justify-content-center" data-aos="fade-up" data-aos-delay="200">
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="300">
-            <a href="services/ai-modernization.html" class="icon-box" style="text-decoration: none; color: inherit; display: block;">
-              <i class="bi bi-robot"></i>
-              <h3>AI Modernization</h3>
-            </a>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="400">
-            <a href="services/workflow-automation.html" class="icon-box" style="text-decoration: none; color: inherit; display: block;">
-              <i class="bi bi-gear-fill"></i>
-              <h3>Workflow Automation</h3>
-            </a>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="500">
-            <a href="services/cloud-ai-solutions.html" class="icon-box" style="text-decoration: none; color: inherit; display: block;">
-              <i class="bi bi-cloud-fill"></i>
-              <h3>Cloud Services</h3>
-            </a>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="600">
-            <a href="services/monitoring-analytics.html" class="icon-box" style="text-decoration: none; color: inherit; display: block;">
-              <i class="bi bi-graph-up"></i>
-              <h3>Monitoring</h3>
-            </a>
-          </div>
-          <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="700">
-            <a href="services/security-compliance.html" class="icon-box" style="text-decoration: none; color: inherit; display: block;">
-              <i class="bi bi-shield-check"></i>
-              <h3>Security</h3>
-            </a>
-          </div>
-        </div>
-
       </div>
 
     </section><!-- /Hero Section -->
+
+    <!-- Pillars Section -->
+    <section id="pillars" class="dta-pillars" aria-label="What we do">
+      <div class="container">
+        <div class="row g-0">
+          <div class="col-6 col-lg-3 dta-pillar" data-aos="fade-up" data-aos-delay="100">
+            <i class="bi bi-cpu dta-pillar-icon dta-icon-white"></i>
+            <h3>AI Innovation</h3>
+            <p>Exploring and building intelligent solutions that solve real-world challenges.</p>
+          </div>
+          <div class="col-6 col-lg-3 dta-pillar" data-aos="fade-up" data-aos-delay="200">
+            <i class="bi bi-people dta-pillar-icon dta-icon-orange"></i>
+            <h3>Community</h3>
+            <p>Empowering learners, creators and innovators through collaboration and shared knowledge.</p>
+          </div>
+          <div class="col-6 col-lg-3 dta-pillar" data-aos="fade-up" data-aos-delay="300">
+            <i class="bi bi-code-slash dta-pillar-icon dta-icon-red"></i>
+            <h3>Technology</h3>
+            <p>Building tools, platforms and resources for a smarter and more inclusive tomorrow.</p>
+          </div>
+          <div class="col-6 col-lg-3 dta-pillar" data-aos="fade-up" data-aos-delay="400">
+            <i class="bi bi-bullseye dta-pillar-icon dta-icon-orange"></i>
+            <h3>Impact</h3>
+            <p>Creating sustainable impact by applying AI for the good of our community.</p>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Pillars Section -->
 
     <!-- About Section -->
     <section id="about" class="about section">
@@ -785,6 +980,7 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/landing-hero.js"></script>
 
 </body>
 
