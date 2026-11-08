@@ -404,8 +404,8 @@ template = """<!DOCTYPE html>
               <span class="sitename">DevTechAI.Org</span>
             </a>
             <div class="footer-contact pt-3">
-              <p>4th Floor, Mani Tech Space</p>
-              <p>Siddhi Vinayak Nagar, Madhapur, Hyderabad, Telangana 500081</p>
+              <p>Mani Tech Space</p>
+              <p>Madhapur, Hyderabad, TS 500081</p>
               <p class="mt-3"><strong>Email:</strong> <span>contact@devtechai.org</span></p>
               <p><strong>Phone:</strong> <span>+91 7794841440</span></p>
             </div>

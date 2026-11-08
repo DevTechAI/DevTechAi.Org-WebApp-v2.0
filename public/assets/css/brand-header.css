@@ -34,6 +34,8 @@
 .dta-header .logo .dta-brand-text {
   display: flex;
   flex-direction: column;
+  align-items: center;      /* tagline centred under the wordmark */
+  text-align: center;
   line-height: 1.1;
   font-size: inherit;
   color: inherit;
@@ -44,6 +46,7 @@
   font-size: 22px;
   font-weight: 700;
   letter-spacing: 2px;
+  padding-left: 2px;
   color: var(--dta-navy);
 }
 
@@ -57,6 +60,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1.6px;
+  padding-left: 1.6px;
   text-transform: uppercase;
   color: var(--dta-navy);
 }
@@ -117,10 +121,182 @@
   .dta-header .logo .dta-brand-name {
     font-size: 17px;
     letter-spacing: 1.2px;
+    padding-left: 1.2px;
   }
 
   .dta-header .logo .dta-brand-tagline {
     font-size: 9px;
     letter-spacing: 1.2px;
+    padding-left: 1.2px;
   }
 }
+
+/* Sub-pages: header is fixed (same as landing page), so offset the content below it */
+body:not(.index-page) .main {
+  padding-top: 80px;
+}
+
+@media (max-width: 768px) {
+  body:not(.index-page) .main {
+    padding-top: 68px;
+  }
+}
+
+/* Nested submenus (AI-Native Solutions, Workflow Automation): open flush to the left of the parent menu */
+@media (min-width: 1200px) {
+  .dta-header .navmenu .dropdown .dropdown ul,
+  .dta-header .navmenu .dropdown .dropdown:hover > ul {
+    left: auto;
+    right: 100%;
+  }
+
+  .dta-header .navmenu .dropdown ul a {
+    white-space: nowrap;
+  }
+}
+
+.dta-header .btn-getstarted.dta-header-cta {
+  white-space: nowrap;
+}
+
+/* Our Mission statement */
+.dta-mission-text { margin-bottom: 40px; }
+.dta-mission-text p {
+  font-size: 16px;
+  line-height: 1.7;
+  text-align: left;
+  margin: 0;
+}
+
+/* Tighter gap between the Our Mission title and its description */
+.features .section-title { padding-bottom: 18px; }
+@media (max-width: 768px) {
+  .features .section-title { padding-bottom: 14px; }
+}
+
+/* About page: keep the "Who We Are" block close to the mission section below it */
+.about-us.section { padding-bottom: 0; }
+.about-us .dta-mission-text { margin-bottom: 0; }
+.about-us .dta-mission-text p { text-align: center; }
+
+/* About page headings: the small title is shrink-wrapped and centred, with the
+   decorative line hung off its right edge, so "Who We Are" sits exactly under
+   the middle of "About Us" */
+.about-us .section-title,
+.features .section-title { padding-bottom: 12px; }
+.about-us .section-title h2,
+.features .section-title h2 {
+  display: table;
+  margin: 0 auto 6px;
+  line-height: 1.4;
+  position: relative;
+}
+.about-us .section-title h2::after,
+.features .section-title h2::after {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin: 0 0 0 10px;
+}
+
+/* Community section (landing page) */
+.testimonials .section-title { padding-bottom: 12px; }
+.testimonials .section-title h2 {
+  display: table;
+  margin: 0 auto 6px;
+  line-height: 1.4;
+  position: relative;
+}
+.testimonials .section-title h2::after {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin: 0 0 0 10px;
+}
+.dta-community-text { max-width: 860px; margin: 0 auto; text-align: center; }
+.dta-community-text p { font-size: 17px; line-height: 1.8; margin: 0 0 14px; }
+.dta-community-text p:last-child { margin-bottom: 0; }
+
+/* Careers page */
+.careers .section-title { padding-bottom: 12px; }
+.careers .section-title h2 { display: table; margin: 0 auto 6px; line-height: 1.4; position: relative; }
+.careers .section-title h2::after { position: absolute; left: 100%; top: 50%; margin: 0 0 0 10px; }
+.dta-career-filters {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+  margin: 24px 0 32px;
+}
+.dta-career-filter {
+  font-family: "Poppins", sans-serif; font-size: 15px; font-weight: 600;
+  padding: 10px 26px; border-radius: 50px; cursor: pointer;
+  color: var(--dta-navy); background: #fff;
+  border: 2px solid var(--dta-navy);
+  transition: background .2s, color .2s, border-color .2s;
+}
+.dta-career-filter:hover { background: rgba(242, 140, 27, 0.12); }
+.dta-career-filter.active,
+.dta-career-filter.active:hover { color: #fff; background: var(--dta-maroon); border-color: var(--dta-maroon); }
+.dta-career-filter:focus-visible { outline: 3px solid rgba(242, 140, 27, 0.6); outline-offset: 2px; }
+.dta-career-panel[hidden] { display: none; }
+.dta-career-empty {
+  max-width: 720px; margin: 0 auto; text-align: center;
+  padding: 44px 28px; border-radius: 14px;
+  background: #fff; box-shadow: 0 4px 24px rgba(15, 31, 75, 0.08);
+  border: 1px solid rgba(15, 31, 75, 0.08);
+}
+.dta-career-empty > i { font-size: 44px; color: var(--dta-orange, #f28c1b); }
+.dta-career-empty h3 { font-size: 22px; font-weight: 700; margin: 12px 0 8px; color: var(--dta-navy); }
+.dta-career-empty p { margin: 0; font-size: 16px; line-height: 1.7; }
+.dta-career-empty a { color: var(--dta-maroon); font-weight: 600; word-break: break-all; }
+@media (max-width: 575px) {
+  .dta-career-filter { padding: 8px 18px; font-size: 14px; }
+}
+
+/* Job cards (closed positions) */
+.dta-career-notice { margin-bottom: 32px; padding: 28px; }
+.dta-career-notice > i { font-size: 34px; }
+.dta-career-notice h3 { font-size: 20px; }
+.dta-job-card {
+  height: 100%; display: flex; flex-direction: column;
+  padding: 24px; border-radius: 14px; background: #fff;
+  border: 1px solid rgba(15, 31, 75, 0.1);
+  box-shadow: 0 4px 20px rgba(15, 31, 75, 0.06);
+}
+.dta-job-card.is-closed { background: #f7f8fb; }
+.dta-job-card.is-closed h4,
+.dta-job-card.is-closed p,
+.dta-job-card.is-closed .dta-job-icon { opacity: 0.6; }
+.dta-job-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.dta-job-icon { font-size: 34px; color: var(--dta-navy); }
+.dta-job-badge {
+  font-size: 12px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 50px;
+  color: var(--dta-maroon); background: rgba(139, 16, 32, 0.1);
+  border: 1px solid rgba(139, 16, 32, 0.25);
+}
+.dta-job-card h4 { font-size: 19px; font-weight: 700; margin: 0 0 8px; color: var(--dta-navy); }
+.dta-job-card p { font-size: 15px; line-height: 1.6; margin: 0 0 18px; flex-grow: 1; }
+.dta-job-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.dta-job-type { font-size: 13px; font-weight: 600; color: var(--dta-navy); }
+.dta-job-closed-btn {
+  font-size: 14px; font-weight: 600; padding: 6px 18px; border-radius: 50px;
+  color: #8a8f9c; background: #e6e8ee; cursor: not-allowed; user-select: none;
+}
+
+/* Office addresses: one separated block per location, pin icon on the left */
+.footer .footer-contact .dta-addr { display: flex; align-items: flex-start; gap: 12px; }
+.footer .footer-contact .dta-addr + .dta-addr { margin-top: 16px; }
+.footer .footer-contact .dta-addr p { margin: 0; }
+.footer .footer-contact .dta-addr-icon {
+  flex-shrink: 0; font-size: 18px; line-height: 1.5; color: var(--accent-color);
+}
+.contact .info-item.dta-office-item + .info-item.dta-office-item { margin-top: 24px; }
+.contact .info-item.dta-office-item + .info-item:not(.dta-office-item) { margin-top: 40px; }
+
+/* Footer logo */
+.footer .footer-about .logo { gap: 12px; }
+.footer .footer-about .dta-footer-logo {
+  width: 56px; height: 56px; max-height: none; margin: 0;
+  border-radius: 50%; background: #fff; object-fit: contain;
+}
+.footer .footer-about .dta-footer-logo { flex: 0 0 56px; min-width: 56px; aspect-ratio: 1 / 1; }
+.footer .footer-about .logo img.dta-footer-logo { max-height: none; width: 56px; height: 56px; margin-right: 0; }

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DevTechAi.Org</title>
+  <meta name="description" content="Comprehensive AI integration and modernization services">
+  <meta name="keywords" content="DevTechAI, AI Solutions, solutions">
+
+  <!-- Favicons -->
+  <link href="/favicon.ico?v=2" rel="icon" sizes="any">
+  <link href="/images/logos/favicon-32.png?v=2" rel="icon" type="image/png" sizes="32x32">
+  <link href="/images/logos/favicon-16.png?v=2" rel="icon" type="image/png" sizes="16x16">
+  <link href="/images/logos/favicon-192.png?v=2" rel="icon" type="image/png" sizes="192x192">
+
+<link href="/images/logos/apple-touch-icon.png?v=2" rel="apple-touch-icon">
+<!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="../assets/css/main.css" rel="stylesheet">
+  <link href="../assets/css/brand-header.css" rel="stylesheet">
+  <!-- Mobile Responsive Enhancements -->
+  <style>
+    /* Mobile Logo Sizing */
+    .logo-img {
+      height: 40px;
+      margin-right: 10px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    
+    @media (max-width: 768px) {
+      .logo-img {
+        height: 32px;
+        margin-right: 8px;
+      }
+      
+      .sitename {
+        font-size: 1.2rem !important;
+      }
+      
+      .header .btn-getstarted {
+        padding: 5px 12px !important;
+        font-size: 0.85rem !important;
+        white-space: nowrap;
+      }
+      
+      .header {
+        padding: 10px 0 !important;
+      }
+      
+      .container-fluid {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .logo-img {
+        height: 28px;
+        margin-right: 6px;
+      }
+      
+      .sitename {
+        font-size: 1rem !important;
+      }
+      
+      .header .btn-getstarted {
+        padding: 4px 10px !important;
+        font-size: 0.75rem !important;
+        display: none; /* Hide on very small screens */
+      }
+      
+      .header .logo span {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* Mobile Section Improvements */
+    @media (max-width: 768px) {
+      .section {
+        padding: 40px 0 !important;
+      }
+      
+      .section-title h2 {
+        font-size: 24px !important;
+      }
+      
+      .section-title p {
+        font-size: 14px !important;
+      }
+      
+      .hero h2 {
+        font-size: 28px !important;
+      }
+      
+      .hero p {
+        font-size: 16px !important;
+      }
+    }
+    
+    /* Mobile Card Improvements */
+    @media (max-width: 768px) {
+      .card, .icon-box {
+        margin-bottom: 20px;
+      }
+      
+      .row.gy-4 > * {
+        margin-bottom: 20px;
+      }
+    }
+    
+    /* Mobile Text Improvements */
+    @media (max-width: 576px) {
+      h1 { font-size: 1.75rem !important; }
+      h2 { font-size: 1.5rem !important; }
+      h3 { font-size: 1.25rem !important; }
+      h4 { font-size: 1.1rem !important; }
+      p { font-size: 0.95rem !important; }
+    }
+    
+    /* Mobile Button Improvements */
+    @media (max-width: 768px) {
+      .btn {
+        padding: 10px 20px !important;
+        font-size: 0.9rem !important;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+    
+    /* Mobile Navigation Improvements */
+    @media (max-width: 1199px) {
+      .mobile-nav-toggle {
+        display: block !important;
+      }
+      
+      .header .btn-getstarted {
+        margin-right: 45px;
+      }
+    }
+    
+    /* Ensure mobile menu doesn't overlap content */
+    @media (max-width: 1199px) {
+      .mobile-nav-active .navmenu ul {
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+      }
+    }
+    
+    /* Mobile Sidebar Improvements */
+    @media (max-width: 768px) {
+      .sidebar {
+        margin-bottom: 30px;
+      }
+      
+      .content {
+        padding-left: 0 !important;
+      }
+    }
+    
+    /* Mobile Table Improvements */
+    @media (max-width: 768px) {
+      table {
+        font-size: 0.85rem;
+      }
+      
+      table th,
+      table td {
+        padding: 8px 4px !important;
+      }
+    }
+    
+    /* Mobile Image Improvements */
+    @media (max-width: 768px) {
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+    
+    /* Services List One by One */
+    .services-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .services-list a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .services-list a:hover {
+      background-color: rgba(255, 196, 81, 0.1);
+      padding-left: 15px;
+    }
+    
+    .services-list a i {
+      color: #ffc451;
+      font-size: 1.2em;
+    }
+  </style>
+
+</head>
+
+<body class="service-details-page">
+
+  <header id="header" class="header dta-header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo dta-brand d-flex align-items-center me-auto me-xl-0">
+        <img src="/images/logos/dtai-emblem.png" alt="DevTechAI.Org Logo" class="dta-brand-emblem">
+        <span class="dta-brand-text">
+          <span class="dta-brand-name">DEVTECH<span class="dta-brand-ai">AI</span>.ORG</span>
+          <span class="dta-brand-tagline">AI Lab for Community</span>
+        </span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/#hero">Home</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/careers.html">Careers</a></li>
+          <li><a href="/#testimonials">Community</a></li>
+          <li class="dropdown"><a href="#" class="active"><span>Our Offerings</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li class="dropdown"><a href="/solutions/ai-solutions.html"><span>AI-Native Solutions</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="/solutions/mcp-server-client-solutions.html">MCP Server &amp; Client Solutions</a></li>
+                  <li><a href="/solutions/rag-chat-agent-solutions.html">RAG Chat Agent Solutions</a></li>
+                  <li><a href="/solutions/ai-seo-geo.html">AI SEO/GEO</a></li>
+                  <li><a href="/solutions/voice-agent-solutions.html">Voice Agent Solutions</a></li>
+                  <li><a href="/solutions/ml-finetuning-solutions.html">ML Finetuning Solutions</a></li>
+                </ul>
+              </li>
+              <li class="dropdown"><a href="#"><span>Workflow Automation</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="/solutions/n8n-integration.html">N8N Integration</a></li>
+                  <li><a href="/solutions/zapier-automation.html">Zapier Automation</a></li>
+                  <li><a href="/solutions/custom-workflows.html">Custom Workflows</a></li>
+                  <li><a href="/solutions/api-integrations.html">API Integrations</a></li>
+                  <li><a href="/solutions/webhook-management.html">Webhook Management</a></li>
+                  <li><a href="/solutions/agentic-ai-bpm-automation.html">AgenticAI BPM Automation</a></li>
+                </ul>
+              </li>
+              <li class="dropdown"><a href="/solutions/cloud-services.html"><span>Cloud Tech Solutions</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="/solutions/monitoring.html">Monitoring &amp; Analytics</a></li>
+                  <li><a href="/solutions/data-engineering.html">Data Engineering</a></li>
+                  <li><a href="/solutions/cloud-migration.html">Cloud Migration</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="btn-getstarted dta-header-cta" href="/#contact">Get Involved</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title" data-aos="fade">
+      <div class="heading">
+        <div class="container">
+          <div class="row d-flex justify-content-center text-center">
+            <div class="col-lg-8">
+              <h1>MCP Server &amp; Client Solutions</h1>
+              <p class="mb-0">Connect AI agents to your tools and data with the Model Context Protocol</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="breadcrumbs">
+        <div class="container">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#services">Solutions</a></li>
+            <li class="current">MCP Server &amp; Client Solutions</li>
+          </ol>
+        </div>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <!-- Solution Details Section -->
+    <section id="solution-details" class="solution-details section">
+
+      <div class="container">
+
+        <div class="row gy-5">
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+
+            <div class="service-box">
+              <h4>Our Solutions</h4>
+              <div class="services-list">
+                <a href="ai-solutions.html"><i class="bi bi-arrow-right-circle"></i><span>AI-Native Solutions</span></a>
+                <a href="mcp-server-client-solutions.html" class="active"><i class="bi bi-arrow-right-circle"></i><span>MCP Server &amp; Client Solutions</span></a>
+                <a href="rag-chat-agent-solutions.html"><i class="bi bi-arrow-right-circle"></i><span>RAG Chat Agent Solutions</span></a>
+                <a href="ai-seo-geo.html"><i class="bi bi-arrow-right-circle"></i><span>AI SEO/GEO</span></a>
+                <a href="voice-agent-solutions.html"><i class="bi bi-arrow-right-circle"></i><span>Voice Agent Solutions</span></a>
+                <a href="ml-finetuning-solutions.html"><i class="bi bi-arrow-right-circle"></i><span>ML Finetuning Solutions</span></a>
+                <a href="n8n-integration.html"><i class="bi bi-arrow-right-circle"></i><span>N8N Integration</span></a>
+                <a href="zapier-automation.html"><i class="bi bi-arrow-right-circle"></i><span>Zapier Automation</span></a>
+                <a href="custom-workflows.html"><i class="bi bi-arrow-right-circle"></i><span>Custom Workflows</span></a>
+                <a href="api-integrations.html"><i class="bi bi-arrow-right-circle"></i><span>API Integrations</span></a>
+                <a href="webhook-management.html"><i class="bi bi-arrow-right-circle"></i><span>Webhook Management</span></a>
+                <a href="agentic-ai-bpm-automation.html"><i class="bi bi-arrow-right-circle"></i><span>AgenticAI BPM Automation</span></a>
+                <a href="cloud-services.html"><i class="bi bi-arrow-right-circle"></i><span>Cloud Tech Solutions</span></a>
+                <a href="monitoring.html"><i class="bi bi-arrow-right-circle"></i><span>Monitoring &amp; Analytics</span></a>
+                <a href="data-engineering.html"><i class="bi bi-arrow-right-circle"></i><span>Data Engineering</span></a>
+                <a href="cloud-migration.html"><i class="bi bi-arrow-right-circle"></i><span>Cloud Migration</span></a>
+              </div>
+            </div>
+
+            <div class="help-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-headset flex-shrink-0" style="font-size: 3em; color: #ffc451;"></i>
+              <h4>Need Help?</h4>
+              <p>Our team is here to help you implement the best solutions for your business.</p>
+              <a href="/#contact" class="btn-get-started">Contact Us</a>
+            </div>
+
+          </div>
+
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-details">
+              <div class="service-heading">
+                <i class="bi bi-plug flex-shrink-0"></i>
+                <h2>MCP Server &amp; Client Solutions</h2>
+              </div>
+
+              <p>
+                We design, build and secure Model Context Protocol (MCP) servers and clients so AI assistants and agents can safely use your internal systems, APIs and data.
+              </p>
+              <h3>What We Build</h3>
+              <ul>
+                <li><i class="bi bi-check-circle"></i> <span><strong>Custom MCP Servers:</strong> Expose databases, SaaS tools, internal APIs and file stores to AI agents through well-defined MCP tools and resources</span></li>
+                <li><i class="bi bi-check-circle"></i> <span><strong>MCP Client Integration:</strong> Add MCP client support to your own applications and agents so they can discover and call any compliant server</span></li>
+                <li><i class="bi bi-check-circle"></i> <span><strong>Authentication &amp; Access Control:</strong> OAuth-based sign-in, scoped permissions and audit logs so agents only reach what they are allowed to</span></li>
+                <li><i class="bi bi-check-circle"></i> <span><strong>Gateway &amp; Registry:</strong> Central MCP gateway with tool catalogue, rate limiting, observability and version management</span></li>
+                <li><i class="bi bi-check-circle"></i> <span><strong>Legacy System Wrappers:</strong> Wrap existing REST, SOAP and database systems as MCP tools without rewriting them</span></li>
+              </ul>
+              <h3>Benefits</h3>
+              <p>
+                One standard connector layer replaces one-off integrations, so each new AI agent or model can reuse the same tools with consistent security and monitoring.
+              </p>
+              <h3>Use Cases</h3>
+              <ul>
+                <li>Give coding and support agents controlled access to internal tools</li>
+                <li>Expose CRM, ticketing and ERP data to AI assistants</li>
+                <li>Standardise tool access across multiple LLM providers</li>
+                <li>Secure and audit agent actions in production</li>
+              </ul>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Solution Details Section -->
+
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-6 footer-about">
+            <a href="/" class="logo d-flex align-items-center">
+              <img src="/images/logos/favicon-192.png" alt="DevTechAI.Org Logo" class="dta-footer-logo" width="56" height="56">
+              <span class="sitename">DevTechAI.Org</span>
+            </a>
+            <div class="footer-contact pt-3">
+              <div class="dta-addr">
+                <i class="bi bi-geo-alt-fill dta-addr-icon" aria-hidden="true"></i>
+                <div>
+                <p>Mani Tech Space</p>
+                <p>Madhapur, Hyderabad, TS 500081</p>
+                </div>
+              </div>
+              <div class="dta-addr">
+                <i class="bi bi-geo-alt-fill dta-addr-icon" aria-hidden="true"></i>
+                <div>
+                <p>Tech Work Space</p>
+                <p>Broadway, New York, NY 10003, USA</p>
+                </div>
+              </div>
+              <div class="dta-addr">
+                <i class="bi bi-geo-alt-fill dta-addr-icon" aria-hidden="true"></i>
+                <div>
+                <p>Tech Work Space</p>
+                <p>2nd Street, San Francisco, CA 94105, USA</p>
+                </div>
+              </div>
+              <p class="mt-3"><strong>Email:</strong> <span>contact@devtechai.org</span></p>
+            </div>
+            <div class="social-links d-flex mt-4">
+              <a href="" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+              <a href="" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/devtechai_labs_official/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/devtechaiorg" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#hero"> Home</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/about.html"> About us</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#services"> Services</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#portfolio"> Portfolio</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="/#contact"> Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bi bi-chevron-right"></i> <a href="../services/ai-modernization.html"> AI Modernization</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="../services/workflow-automation.html"> Workflow Automation</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="../services/cloud-ai-solutions.html"> Cloud AI Solutions</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="../services/monitoring-analytics.html"> Monitoring & Analytics</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="../services/security-compliance.html"> Security & Compliance</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-12 footer-newsletter">
+            <h4>Our Newsletter</h4>
+            <p>Subscribe to our newsletter and receive the latest news about AI innovations and cloud solutions!</p>
+            <form action="../forms/newsletter.php" method="post" class="php-email-form">
+              <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
+              <div class="loading">Loading</div>
+              <div class="error-message"></div>
+              <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <div class="container text-center">
+        <p>© <span>Copyright</span> <strong class="px-1">2025</strong> <strong class="px-1 sitename">DevTechAI.Org</strong> <span>All Rights Reserved</span></p>
+        <div class="credits">
+          Designed &amp; Developed by <a href="https://devtechai.org/" target="_blank" rel="noopener noreferrer">DevTechAI.Org</a> Team
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+
+  <!-- Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+</body>
+
+</html>
