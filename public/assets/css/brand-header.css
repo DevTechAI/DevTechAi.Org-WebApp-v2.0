@@ -58,12 +58,13 @@ select {
   box-shadow: 0 2px 18px rgba(15, 31, 75, 0.08);
 }
 
-.dta-header .dta-brand-emblem {
+.dta-header .logo img.dta-brand-emblem {
   width: 56px;
   height: 56px;
   max-height: none;
   margin-right: 12px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
 .dta-header .logo .dta-brand-text {
@@ -146,23 +147,112 @@ select {
   border-color: var(--dta-maroon-hover);
 }
 
+@media (max-width: 1199px) {
+  .dta-header,
+  .index-page .dta-header,
+  .index-page.scrolled .dta-header {
+    padding: 12px 0 !important;
+    min-height: 80px;
+  }
+
+  .dta-header .container-fluid.justify-content-between {
+    justify-content: flex-end !important;
+    min-height: 56px;
+  }
+
+  .dta-header .logo.dta-brand {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 !important;
+    gap: 10px;
+    height: 56px;
+    z-index: 2;
+  }
+
+  .dta-header .logo img.dta-brand-emblem {
+    width: 56px;
+    height: 56px;
+    max-height: none;
+    margin-right: 0;
+  }
+
+  .dta-header .mobile-nav-toggle {
+    position: absolute;
+    left: 8px;
+    right: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 5;
+  }
+
+  .mobile-nav-active .dta-header .mobile-nav-toggle {
+    left: auto;
+    right: 15px;
+    top: 15px;
+    transform: none;
+  }
+
+  .mobile-nav-active .dta-header .navmenu > ul {
+    inset: calc(56px + env(safe-area-inset-top, 0px)) 14px calc(16px + env(safe-area-inset-bottom, 0px)) 14px;
+    max-height: calc(100dvh - 72px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 8px 0 28px;
+  }
+
+  .dta-header .navmenu .dropdown ul {
+    inset: auto;
+    overflow: visible;
+    max-height: none;
+    margin: 6px 10px 10px;
+  }
+
+  .dta-header .navmenu a,
+  .dta-header .navmenu a:focus {
+    white-space: normal;
+    gap: 8px;
+    line-height: 1.35;
+  }
+
+  .dta-header .navmenu a i,
+  .dta-header .navmenu a:focus i {
+    flex-shrink: 0;
+  }
+}
+
 @media (max-width: 768px) {
-  .dta-header .dta-brand-emblem {
-    width: 44px;
-    height: 44px;
-    margin-right: 8px;
+  .dta-header,
+  .index-page .dta-header,
+  .index-page.scrolled .dta-header {
+    padding: 12px 0 !important;
+    min-height: 80px;
+  }
+
+  .dta-header .container-fluid {
+    min-height: 56px;
+  }
+
+  .dta-header .logo img.dta-brand-emblem {
+    width: 56px;
+    height: 56px;
+    max-height: none;
   }
 
   .dta-header .logo .dta-brand-name {
-    font-size: 17px;
-    letter-spacing: 1.2px;
-    padding-left: 1.2px;
+    font-size: 22px;
+    letter-spacing: 2px;
+    padding-left: 2px;
   }
 
   .dta-header .logo .dta-brand-tagline {
-    font-size: 9px;
-    letter-spacing: 1.2px;
-    padding-left: 1.2px;
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    padding-left: 1.6px;
   }
 }
 
@@ -173,7 +263,7 @@ body:not(.index-page) .main {
 
 @media (max-width: 768px) {
   body:not(.index-page) .main {
-    padding-top: 68px;
+    padding-top: 80px;
   }
 }
 
