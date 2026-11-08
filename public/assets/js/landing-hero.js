@@ -6,23 +6,39 @@
   if (!wrap || !emblem) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const DRAG_THRESHOLD_DEG = 5;
-  const CLICK_SPIN_DEG = 360;
-  const CLICK_SPIN_MS = 900;
-  const MIN_VELOCITY = 0.02;
-  const MAX_VELOCITY = 2.8;
-  const FRICTION = 0.0032;
+
+  const DRAG_THRESHOLD_DEG = 6;
+  const SAMPLE_WINDOW_MS = 110;
+  const FLICK_GAIN = 1.28;
+  const CLICK_IMPULSE = 620;
+  const MAX_OMEGA = 1800;
+  const VISCOUS = 0.48;
+  const COULOMB = 16;
+  const GRAVITY = 260;
+  const SETTLE_SPEED = 95;
+  const SETTLE_SPRING = 9.5;
+  const SETTLE_DAMP = 4.2;
+  const REST_OMEGA = 12;
+  const REST_ALIGN_DEG = 2.5;
 
   let rotation = 0;
+  let velocity = 0;
   let dragging = false;
   let lastAngle = 0;
   let lastTime = 0;
-  let velocity = 0;
   let dragDistance = 0;
-  let inertiaId = 0;
-  let clickSpinId = 0;
+  let physicsId = 0;
+  let samples = [];
 
   emblem.classList.add("is-pending");
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function principalDeg(deg) {
+    return ((deg % 360) + 360) % 360;
+  }
 
   function applyRotation() {
     emblem.style.transform = "rotate(" + rotation + "deg)";
@@ -39,16 +55,11 @@
     }
   }
 
-  function stopMotion() {
-    if (inertiaId) {
-      cancelAnimationFrame(inertiaId);
-      inertiaId = 0;
+  function stopPhysics() {
+    if (physicsId) {
+      cancelAnimationFrame(physicsId);
+      physicsId = 0;
     }
-    if (clickSpinId) {
-      cancelAnimationFrame(clickSpinId);
-      clickSpinId = 0;
-    }
-    velocity = 0;
   }
 
   function takeOverFromCss() {
@@ -73,6 +84,38 @@
     return delta;
   }
 
+  function shortestDeg(from, to) {
+    let delta = to - from;
+    while (delta > 180) delta -= 360;
+    while (delta < -180) delta += 360;
+    return delta;
+  }
+
+  function recordSample(omega, now) {
+    samples.push({ t: now, omega: omega });
+    const cutoff = now - SAMPLE_WINDOW_MS;
+    while (samples.length && samples[0].t < cutoff) {
+      samples.shift();
+    }
+  }
+
+  function releaseVelocity() {
+    if (!samples.length) return velocity;
+
+    let weighted = 0;
+    let weightSum = 0;
+    const newest = samples[samples.length - 1].t;
+
+    for (let i = 0; i < samples.length; i += 1) {
+      const age = newest - samples[i].t;
+      const weight = 1 + (SAMPLE_WINDOW_MS - age) / SAMPLE_WINDOW_MS;
+      weighted += samples[i].omega * weight;
+      weightSum += weight;
+    }
+
+    return (weighted / weightSum) * FLICK_GAIN;
+  }
+
   function spinEmblem() {
     if (reduceMotion) {
       emblem.classList.remove("is-pending");
@@ -80,7 +123,8 @@
       return;
     }
 
-    stopMotion();
+    stopPhysics();
+    velocity = 0;
     rotation = 0;
     emblem.style.transform = "";
     emblem.classList.remove("is-pending", "is-spinning");
@@ -88,73 +132,70 @@
     emblem.classList.add("is-spinning");
   }
 
-  function startInertia() {
-    if (reduceMotion || Math.abs(velocity) < MIN_VELOCITY) {
+  function startPhysics() {
+    if (reduceMotion) {
       velocity = 0;
       return;
     }
 
+    stopPhysics();
+    velocity = clamp(velocity, -MAX_OMEGA, MAX_OMEGA);
+
     let previous = performance.now();
 
     function tick(now) {
-      const dt = Math.min(now - previous, 48);
+      let dt = (now - previous) / 1000;
       previous = now;
+      dt = Math.min(Math.max(dt, 0), 0.032);
+
+      const toRest = shortestDeg(principalDeg(rotation), 0);
+      const speed = Math.abs(velocity);
+      const gravityAccel = GRAVITY * Math.sin(toRest * Math.PI / 180);
+      const viscousAccel = -VISCOUS * velocity;
+      const coulombAccel = speed > 0.4 ? -COULOMB * Math.sign(velocity) : 0;
+      let accel = gravityAccel + viscousAccel + coulombAccel;
+
+      if (speed < SETTLE_SPEED) {
+        accel += toRest * SETTLE_SPRING - velocity * SETTLE_DAMP;
+      }
+
+      velocity += accel * dt;
+      velocity = clamp(velocity, -MAX_OMEGA, MAX_OMEGA);
       rotation += velocity * dt;
-      velocity *= Math.exp(-FRICTION * dt);
       applyRotation();
 
-      if (Math.abs(velocity) >= MIN_VELOCITY) {
-        inertiaId = requestAnimationFrame(tick);
-      } else {
+      if (Math.abs(velocity) < REST_OMEGA && Math.abs(toRest) < REST_ALIGN_DEG) {
         velocity = 0;
-        inertiaId = 0;
+        rotation = Math.round(rotation / 360) * 360;
+        applyRotation();
+        physicsId = 0;
+        return;
       }
+
+      physicsId = requestAnimationFrame(tick);
     }
 
-    inertiaId = requestAnimationFrame(tick);
-  }
-
-  function startClickSpin() {
-    if (reduceMotion) return;
-
-    const start = rotation;
-    const change = CLICK_SPIN_DEG;
-    const begin = performance.now();
-
-    function easeOutCubic(t) {
-      return 1 - Math.pow(1 - t, 3);
-    }
-
-    function tick(now) {
-      const progress = Math.min((now - begin) / CLICK_SPIN_MS, 1);
-      rotation = start + change * easeOutCubic(progress);
-      applyRotation();
-
-      if (progress < 1) {
-        clickSpinId = requestAnimationFrame(tick);
-      } else {
-        clickSpinId = 0;
-      }
-    }
-
-    clickSpinId = requestAnimationFrame(tick);
+    physicsId = requestAnimationFrame(tick);
   }
 
   function onPointerDown(event) {
     if (event.button !== undefined && event.button !== 0) return;
 
     event.preventDefault();
-    stopMotion();
+    stopPhysics();
 
     if (emblem.classList.contains("is-spinning") || emblem.classList.contains("is-pending")) {
       takeOverFromCss();
+      velocity = 0;
     }
 
     dragging = true;
     dragDistance = 0;
+    samples = [];
     lastAngle = pointerAngle(event);
     lastTime = performance.now();
     wrap.classList.add("is-dragging");
+
     if (wrap.setPointerCapture) {
       try {
         wrap.setPointerCapture(event.pointerId);
@@ -176,7 +217,9 @@
     dragDistance += Math.abs(deltaDeg);
 
     if (dt >= 8) {
-      velocity = Math.max(-MAX_VELOCITY, Math.min(MAX_VELOCITY, deltaDeg / dt));
+      const omega = clamp(deltaDeg / (dt / 1000), -MAX_OMEGA, MAX_OMEGA);
+      velocity = omega;
+      recordSample(omega, now);
     }
 
     lastAngle = angle;
@@ -190,16 +233,23 @@
     dragging = false;
     wrap.classList.remove("is-dragging");
 
-    if (wrap.hasPointerCapture(event.pointerId)) {
-      wrap.releasePointerCapture(event.pointerId);
+    if (wrap.hasPointerCapture && wrap.hasPointerCapture(event.pointerId)) {
+      try {
+        wrap.releasePointerCapture(event.pointerId);
+      } catch (err) {
+        /* already released */
+      }
     }
 
-    if (dragDistance < DRAG_THRESHOLD_DEG && Math.abs(velocity) < MIN_VELOCITY) {
-      startClickSpin();
-      return;
+    const tapped = dragDistance < DRAG_THRESHOLD_DEG;
+    if (tapped) {
+      const direction = velocity >= 0 ? 1 : -1;
+      velocity += direction * CLICK_IMPULSE;
+    } else {
+      velocity = releaseVelocity();
     }
 
-    startInertia();
+    startPhysics();
   }
 
   wrap.addEventListener("pointerdown", onPointerDown);
@@ -207,13 +257,13 @@
   wrap.addEventListener("pointerup", onPointerUp);
   wrap.addEventListener("pointercancel", onPointerUp);
   wrap.addEventListener("lostpointercapture", () => {
-    dragging = false;
     wrap.classList.remove("is-dragging");
   });
 
   emblem.addEventListener("animationend", (event) => {
     if (event.animationName !== "dta-wheel-spin") return;
     takeOverFromCss();
+    velocity = 0;
   });
 
   window.addEventListener("load", () => setTimeout(spinEmblem, 250));
