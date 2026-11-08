@@ -1,3 +1,38 @@
+/* ==========================================================================
+   Primary website font: D-DIN (SIL Open Font License, self-hosted)
+   Body text, menu, buttons and form text use D-DIN. Headings keep their own
+   font (--heading-font) and the brand wordmark keeps its logo type.
+   ========================================================================== */
+@font-face {
+  font-family: "D-DIN";
+  src: url("../fonts/d-din/D-DIN.woff2") format("woff2"), url("../fonts/d-din/D-DIN.woff") format("woff");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "D-DIN";
+  src: url("../fonts/d-din/D-DIN-Italic.woff2") format("woff2"), url("../fonts/d-din/D-DIN-Italic.woff") format("woff");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "D-DIN";
+  src: url("../fonts/d-din/D-DIN-Bold.woff2") format("woff2"), url("../fonts/d-din/D-DIN-Bold.woff") format("woff");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+:root {
+  --default-font: "D-DIN", "DIN Alternate", "Roboto", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+/* Heading-style section taglines keep their original font */
+.section-title p { font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif; }
+.navmenu a,
+.navmenu a:focus,
+button,
+input,
+textarea,
+select {
+  font-family: var(--default-font);
+}
+
 /*--------------------------------------------------------------
 # Brand Header
 --------------------------------------------------------------*/
@@ -226,7 +261,7 @@ body:not(.index-page) .main {
   margin: 24px 0 32px;
 }
 .dta-career-filter {
-  font-family: "Poppins", sans-serif; font-size: 15px; font-weight: 600;
+  font-family: var(--default-font); font-size: 15px; font-weight: 600;
   padding: 10px 26px; border-radius: 50px; cursor: pointer;
   color: var(--dta-navy); background: #fff;
   border: 2px solid var(--dta-navy);
