@@ -335,3 +335,12 @@ body:not(.index-page) .main {
 }
 .footer .footer-about .dta-footer-logo { flex: 0 0 56px; min-width: 56px; aspect-ratio: 1 / 1; }
 .footer .footer-about .logo img.dta-footer-logo { max-height: none; width: 56px; height: 56px; margin-right: 0; }
+
+/* Header tabs: bold and dark */
+.dta-header .navmenu > ul > li > a,
+.dta-header .navmenu > ul > li > a:focus,
+.dta-header .navmenu > ul > li > a.active,
+.dta-header .navmenu > ul > li:hover > a {
+  font-weight: 700;
+  color: #0a1230;
+}
