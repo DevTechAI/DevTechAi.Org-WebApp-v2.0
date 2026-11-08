@@ -246,8 +246,18 @@
 
 @media (max-width: 991px) {
   .dta-hero {
-    padding: 110px 0 120px;
+    padding: 100px 0 72px;
     text-align: center;
+    align-items: flex-start;
+  }
+
+  .dta-hero-visual {
+    margin-bottom: 8px;
+  }
+
+  .dta-emblem-wrap {
+    width: clamp(210px, 58vw, 340px);
+    margin: 0 auto;
   }
 
   .dta-hero .dta-hero-lead {
