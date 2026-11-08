@@ -10,7 +10,6 @@
   const DRAG_THRESHOLD_DEG = 6;
   const SAMPLE_WINDOW_MS = 110;
   const FLICK_GAIN = 1.28;
-  const CLICK_IMPULSE = 620;
   const MAX_OMEGA = 1800;
   const VISCOUS = 0.48;
   const COULOMB = 16;
@@ -23,6 +22,7 @@
 
   let rotation = 0;
   let velocity = 0;
+  let pointerDown = false;
   let dragging = false;
   let lastAngle = 0;
   let lastTime = 0;
@@ -178,23 +178,28 @@
     physicsId = requestAnimationFrame(tick);
   }
 
-  function onPointerDown(event) {
-    if (event.button !== undefined && event.button !== 0) return;
-
-    event.preventDefault();
+  function beginDrag() {
+    if (dragging) return;
+    dragging = true;
     stopPhysics();
 
     if (emblem.classList.contains("is-spinning") || emblem.classList.contains("is-pending")) {
       takeOverFromCss();
-      velocity = 0;
     }
 
-    dragging = true;
+    wrap.classList.add("is-dragging");
+  }
+
+  function onPointerDown(event) {
+    if (event.button !== undefined && event.button !== 0) return;
+
+    event.preventDefault();
+    pointerDown = true;
+    dragging = false;
     dragDistance = 0;
     samples = [];
     lastAngle = pointerAngle(event);
     lastTime = performance.now();
-    wrap.classList.add("is-dragging");
 
     if (wrap.setPointerCapture) {
       try {
@@ -206,15 +211,25 @@
   }
 
   function onPointerMove(event) {
-    if (!dragging) return;
+    if (!pointerDown) return;
 
     const angle = pointerAngle(event);
     const now = performance.now();
     const deltaDeg = shortestDelta(lastAngle, angle) * (180 / Math.PI);
     const dt = now - lastTime;
 
-    rotation += deltaDeg;
     dragDistance += Math.abs(deltaDeg);
+
+    if (!dragging) {
+      if (dragDistance < DRAG_THRESHOLD_DEG) {
+        lastAngle = angle;
+        lastTime = now;
+        return;
+      }
+      beginDrag();
+    }
+
+    rotation += deltaDeg;
 
     if (dt >= 8) {
       const omega = clamp(deltaDeg / (dt / 1000), -MAX_OMEGA, MAX_OMEGA);
@@ -228,9 +243,9 @@
   }
 
   function onPointerUp(event) {
-    if (!dragging) return;
+    if (!pointerDown) return;
 
-    dragging = false;
+    pointerDown = false;
     wrap.classList.remove("is-dragging");
 
     if (wrap.hasPointerCapture && wrap.hasPointerCapture(event.pointerId)) {
@@ -241,14 +256,12 @@
       }
     }
 
-    const tapped = dragDistance < DRAG_THRESHOLD_DEG;
-    if (tapped) {
-      const direction = velocity >= 0 ? 1 : -1;
-      velocity += direction * CLICK_IMPULSE;
-    } else {
-      velocity = releaseVelocity();
+    if (!dragging) {
+      return;
     }
 
+    dragging = false;
+    velocity = releaseVelocity();
     startPhysics();
   }
 
