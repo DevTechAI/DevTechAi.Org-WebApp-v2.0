@@ -95,15 +95,33 @@
 .dta-hero .dta-hero-title {
   font-family: "Poppins", sans-serif;
   font-weight: 800;
-  font-size: clamp(2.4rem, 4.6vw, 4rem);
-  line-height: 1.15;
+  font-size: clamp(2.05rem, 3.6vw, 3.25rem);
+  line-height: 1.18;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   margin: 0 0 28px;
 }
 
-.dta-hero-title span {
+.dta-hero-title > span {
   display: block;
+}
+
+.dta-hero-title-pair {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.32em;
+  row-gap: 0;
+}
+
+.dta-hero-title-pair span {
+  display: inline;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .dta-hero-title-pair {
+    flex-wrap: nowrap;
+  }
 }
 
 .dta-text-navy {
@@ -187,6 +205,14 @@
   position: relative;
   width: clamp(280px, 36vw, 480px);
   aspect-ratio: 1;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dta-emblem-wrap.is-dragging {
+  cursor: grabbing;
 }
 
 .dta-emblem-wrap::before {
@@ -210,6 +236,11 @@
     0 0 0 6px rgba(255, 255, 255, 0.6),
     0 0 50px rgba(255, 255, 255, 0.85),
     0 20px 60px rgba(10, 24, 56, 0.35);
+  transform-origin: center center;
+  will-change: transform;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .dta-emblem.is-pending {
